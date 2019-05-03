@@ -1,0 +1,364 @@
+
+body{font-size:13px;background-color:#f8f7f7;color:#333;font-family:'Microsoft Yahei','Simsun',Helvetica,Arial,sans-serif;cursor: pointer; -webkit-tap-highlight-color: rgba(255,255,255,0);}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,select,a,b,em{padding:0;margin:0}
+b,em,i{font-weight:normal;font-style:normal;}
+address,caption,cite,code,dfn,em,th,var {font-weight:normal;font-style:normal}
+ol,ul{list-style:none}
+caption{text-align:left}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+a{text-decoration:none;color:#333;-webkit-tap-highlight-color: rgba(255,255,255,0)}
+a:focus{outline:none;-moz-outline:none;}
+abbr,acronym,img{border:0}
+button,input,select,textarea{font-size:100%;}
+select{ white-space: nowrap;}
+input,button,textarea,select,optgroup,option{resize:none;font-family:inherit;font-size:inherit;font-style:inherit;font-weight:inherit;}
+input{vertical-align: middle;-webkit-tap-highlight-color: rgba(255,255,255,0);outline: none;}
+.fixed:after{content:".";display:block;clear:both;height:0;visibility:hidden;}
+.fixed{display:block;min-height:1%;}
+*html .fixed{height:1%; }
+.cOrange{color:#f60;}
+.cRed{color: red;}
+    
+    
+    
+.page-head{
+    position:relative;width:100%;height:45px;text-align:center;
+    background-color: #fff;
+    border-bottom: 1px solid #f1f1f1;
+    
+    
+}
+.return-btn{position:absolute;top:0;left:0;display:block;width:46px;height:45px;border-right:1px solid #fff;}
+.arrow-l{display:block;width:45px;height:45px;background:url(../images/arrow_back_black.png) center no-repeat;background-size:10px 18px;}
+.page-title{line-height:45px;font-size:18px;font-weight:bold;}
+.newyearimg{width: 100%;}
+.page-head-shade{position:absolute;width:100%;height:26px;text-align:center;color:white;z-index:10;}
+.shadeDiv{background-color:#000000; opacity:0.3;position: absolute;width: 100%;height: 26px;z-index: -1}
+.return-btn-shade{position:absolute;top:0;left:0;display:block;width:46px;height:26px;  }
+.arrow-l-shade{display:block;width:45px;height:26px;background:url(../images/arrow_back_white.png) center no-repeat;background-size:10px 18px;}
+.page-title-shade{line-height:26px;font-size:17px;}
+.btn-style{display:block;height:.8rem;line-height:.8rem;text-align:center;color:#fff;font-size:.32rem;font-weight:bold;border-radius:3px;background-color:#ff7745;}
+.btn-style-new{
+    width: 70%;
+    
+    display: block;
+    border: 1px solid #ff6702;
+    background: #fff;
+    border-radius: 16px;
+    color: #ff7747;
+    padding: .09rem 0;
+    
+    font-size: 14px;
+    text-align: center;
+    margin: 0 auto;
+}
+.errormess{
+	width: 88%;
+	margin: 0 auto;
+	display:block;
+	height:.8rem;
+	line-height:.8rem;
+	text-align:center;
+	color:#fff;
+	font-size:.32rem;
+	font-weight:bold;
+	border-radius:3px;
+	background-color:#ff7745;
+}
+.bg-color{background-color:#ddd;color:#bdbdbd;}
+.btn01{display:block;float:left;width:48%;margin-right:4%;height:40px;line-height:40px;text-align:center;color:#fff;font-size:16px;font-weight:bold;border-radius:3px;background-color:#ff9000;}
+.btn02{display:block;float:left;width:48%;height:40px;line-height:40px;text-align:center;color:#fff;font-size:16px;font-weight:bold;border-radius:3px;background-color:#f36303;}
+.error{color:red;margin:10px 0;padding-left:12px;line-height:22px;font-size:15px;}
+.loadingdiv{position:fixed;top:50%;left:50%;margin:-.8rem 0 0 -.8rem;z-index:10000001;width:1.67rem;height:1.67rem;background: url(../images/loading_4.gif)  no-repeat center;background-size: 100% 100%;opacity: .8;}
+.loadingdiv1{position:fixed;top:50%;left:50%;margin:-.8rem 0 0 -.8rem;z-index:10000001;width:1.67rem;height:1.67rem;background: url(../images/loading_4.gif)  no-repeat center;background-size: 100% 100%;opacity: .8;}
+.thickdiv{position:fixed;top:0;left:0;z-index:1111;width:100%;height:100%;background-color: rgb(55, 55, 55);border:0;opacity:0.40;filter:alpha(opacity=40);
+    -moz-background-size: 100%;
+    -o-background-size: 100%;
+    -webkit-background-size: 100%;
+    background-size: 100%;
+}
+.system-error{width:80%;overflow:hidden;margin:30px auto;padding:30px 0;background:url(../images/vr_img03.gif) left center no-repeat;background-size:80px 92px;}
+.system-error span{display:block;margin-left:85px;line-height:25px;}
+.btn_invoice{display:block;height:39px;line-height:40px;text-align:center;color:#0592ec;font-size:16px;font-weight:bold;border-radius:3px;background-color:#ffffff;border-style:solid;border-color:#e5e5e5;border-width:thin;}
+.btn_invoiceWeb{display:block;height:39px;line-height:40px;text-align:center;color:#0592ec;font-size:16px;font-weight:bold;border-radius:3px;background-color:#ffffff;float:left;margin:5px;width:98%;border-style:solid;border-color:#e5e5e5;border-width:thin;}
+.right {
+    float: right;
+    font-size: .26rem;
+}
+.cBlue {
+    color: #777;
+}
+.openPrompt {
+    
+    cursor: pointer;
+    line-height: 26px;
+    padding-right: 6px;
+    -webkit-tap-highlight-color: rgba(255,255,255,0)}
+.packupPrompt {
+    
+    cursor: pointer;
+    line-height: 26px;
+    padding-right: 6px;
+}
+.padd{
+    padding: 0 10px;
+}
+.dispay{
+    color:#999;
+    margin-bottom:.6rem;
+    margin-top:.6rem;
+}
+.page{ background-color: #fff;padding: 0 .4rem 0;}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+}
+input[type="number"]{-moz-appearance:textfield;}
+.fix_nav{
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    z-index: 1000;
+    
+    
+}
+.fix_nav .fix_nav_content{
+    display: flex;
+}
+.fix_nav .fix_nav_content li{
+    position: relative;
+    height: 100%;
+    float:left;
+    width: 2.5rem;
+    text-align: center;
+    color: #333;
+    -webkit-tap-highlight-color: rgba(255,255,255,0)
+}
+.fix_nav .fix_nav_content li b{
+    font-size: 10px;
+    display: block;
+}
+.fix_nav .fix_nav_content li.fix_nav_two{
+    width: 2.5rem;
+}
+.fix_nav .fix_nav_content li span{
+    width: 20px;
+    height:  20px;
+    display: inline-block;
+    content: "";
+    overflow: hidden;
+    background: url(../images/icons_new.png) no-repeat -12px -110px;
+    background-size: 136px 182.6px;
+    margin-top: 3px;
+    
+    vertical-align: middle;
+    
+    
+}
+.fix_nav .fix_nav_content li.fix_nav_two span{
+    width: 20px;
+    height:  20px;
+    background-size: 136px 182.6px;
+    background-position: -68px -85px;
+    
+}
+.fix_nav .fix_nav_content li.fix_nav_three span{
+    width: 20px;
+    height:  20px;
+    background-size: 136px 182.6px;
+    background-position: -97px -85.5px;
+    
+}
+.fix_nav .fix_nav_content li.fix_nav_four span.familyIcon{
+    width: 20px;
+    height:  20px;
+    background-size: 136px 182.6px;
+    background-position: -40.5px -85px;
+}
+.redCircle{
+    display: none;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: red;
+    border: 1px solid #fff;
+    left: 54%;
+    top:1px;
+}
+.fixCardList,.broadCardList,.mobileCardList,.iptvCardList{margin-top: .2rem}
+.iptv-errMess{
+    display: none;
+    width: 617px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    margin-top: -90px;
+    left: 50%;
+    margin-left: -310px;
+    color: #fff;
+    background-color: #fecb00;
+    border-radius: 6px;
+    z-index: 9999;
+}
+.iptv-errMessTop{
+    width: 100%;
+    height: 220px;
+    background: #fff;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: #fecb00;
+    font-size: 30px;
+}
+.iptv-errMessBottom{
+    color: #333;
+    font-size: 30px;
+    line-height: 80px;
+    text-align: center;
+}
+.iptv-err{
+    position: absolute;
+    padding-left: 173px;
+    padding-right: 70px;
+    top: 80px;
+}
+.iptv-errTip{
+    position: absolute;
+    display: block;
+    width: 46px;
+    height: 46px;
+    background: url("../../images/err-icon.png") no-repeat;
+    left:96px;
+    top: 78px;
+}
+body.modal-open {
+    position: fixed;
+    width: 100%;
+}
+.allpopup-small {
+    width: 90%;
+    overflow: hidden;
+    position: fixed;
+    top: 4rem;
+    left: 5%;
+    z-index: 9999;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.allpopup-small #errormsg {
+    min-width: 3rem;
+    padding: .2rem .2rem;
+    line-height: .6rem;
+    margin: 0 auto;
+    background-color: #4D4D4D;
+    border-radius: 4px;
+    font-size: .3rem;
+    color: #fff;
+    display: none;
+}
+i, b, input, div, button, img, span,li {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+.border-1px,.border-right-1px {
+    position: relative;
+}
+.border-1px:before {
+    content: " ";
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: 100%;
+    height: 1px;
+    border-top:1px solid #e9eaea;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    z-index: 2;
+}
+.border-right-1px:before{
+    content: " ";
+    position: absolute;
+    left: 1.14rem;
+    top:.2rem;
+    height: .72rem;
+    width: 1px;
+    border-right:1px solid #e9eaea;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+}
+.borAndpad{
+    padding: 0.25rem .4rem 0;
+    border-top: 1px solid #f6f6f6;
+}
+.twoActives{
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+}
+.vouchers{
+    width: 2.4rem;
+    height: .88rem;
+    position: relative;
+    border: 1px solid #f9f8f8;
+    border-radius: .06rem;
+    overflow: hidden;
+    
+}
+.inner-vouchers span{
+    width: .78rem;
+    height: .28rem;
+    line-height: .33rem;
+    border-radius: 2px;
+    font-size: .24rem;
+    text-align: center;
+    color: #fff;
+    position: absolute;
+    left: 5.5%;
+    top: 50%;
+    margin-top: -.14rem;
+    display: inline-block;
+    box-sizing: border-box;
+    background: #ff7745;
+}
+.inner-vouchers {
+    display: block;
+    width: 90%;
+    height: .88rem;
+    background: #fff;
+    padding: 0 0 0 10%;
+    
+}
+.twoActives .inner-vouchers .coupon {
+    position: absolute;
+    
+    display: block;
+    color: #fff;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    height: .28rem;
+    text-align: center;
+    line-height: 0.28rem;
+    left: -0.3rem;
+    top: 0.2rem;
+    width: 1rem;
+    font-size: .2rem;
+}
+.cur-cashVoucher{
+    display: inline-block;
+    color: #333;
+    font-size: .24rem;
+    height: .92rem;
+    line-height: .92rem;
+    
+    text-align: center;
+    width: 100%;
+}

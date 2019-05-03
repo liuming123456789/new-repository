@@ -1,0 +1,1 @@
+staticsrc = "http://image.shop.10010.com/upay/biz/npfMob/npfMobWap/", version = "201404291301";

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="wxGz"
+  id="myeclipse.1556525880157"
+  context-root="/wxGz"
+  j2ee-spec="5.0"
+  archive="wxGz.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

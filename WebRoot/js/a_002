@@ -1,0 +1,1377 @@
+function clearIdQuery() {
+    $(".idqueryCity").val(""), $(".idNumber").val("");
+}
+
+function getNewVerifyCode() {
+    $.ajax({
+        type: "post",
+        url: getUrl() + "VerifyCodeNew/getUrl",
+        data: {
+            channelType: CHANNEL_TYPE
+        },
+        dataType: "json",
+        timeout: 1e5,
+        success: function(e) {
+            var o = e.jsUrl;
+            if (void 0 == o || "" == o || null == o) charge.verifyCodeNew = !1; else {
+                var t = document.getElementsByTagName("HEAD").item(0), a = document.createElement("script");
+                a.type = "text/javascript", a.src = o, t.appendChild(a);
+            }
+        },
+        error: function() {
+            charge.verifyCodeNew = !1;
+        }
+    });
+}
+
+function chooseHistory(e, o) {
+    $("#number").val(e), $("#broadband").hasClass("select") && 3 == $("#broadBandfix").val().length ? $(".customInfo").css("margin-left", ".1rem") : $(".customInfo").css("margin-left", ".08rem"), 
+    $(".custominfos,.customMustPay").html(o), $("#addressBookDiv").hide(), phoneSure(!0);
+}
+
+function areaCodeRelation(e) {
+    var o = e.length;
+    if ("" != e) {
+        var t = getProvinceCodeByAreaCode(e);
+        return 0 == t ? ($("#errormsg").html("请输入正确的区号").show(), void errormsgshow()) : void (3 == o ? (confirmProv(t.pno, t.name, !0), 
+        $("#fixNumInput").focus()) : 4 == o && (confirmProv(t.pno, t.name), confirmCity(t.name, t.pno, t.id), 
+        $("#fixNumInput").focus()));
+    }
+}
+
+function cbfn(e) {
+    if (0 == e.ret) {
+        document.getElementById("ticket").value = e.ticket;
+        var o = e.ticket;
+        $("#ticketNew").val(o), paycheckAfterVerify();
+    } else hideWapToAppCss();
+}
+
+function pasteNum(e) {
+    $(e).bind("paste", function(o) {
+        var t = void 0;
+        o.preventDefault(), t = window.clipboardData && window.clipboardData.getData ? window.clipboardData.getData("Text") : o.originalEvent.clipboardData.getData("Text");
+        var a = $(e).val(), n = a + t;
+        $(e).val(n).addClass("broad-bold").removeClass("broad-nobold").focus(), $(e).blur(), 
+        confirmBroadBand(!1);
+    });
+}
+
+function getUnipayActivites() {
+    $.ajax({
+        type: "post",
+        url: serviceBankchargeURL + "activity/getUnipayActivityInfo",
+        dataType: "json"
+    }).success(function(e) {
+        if (null != e.WOYFWAP01) for (var o in e) {
+            var t = e[o];
+            conHtml = t.length < 12 ? "<span>" + t + "</span>" : "<span>" + t.slice(0, t.indexOf("+")) + "</span><span>" + t.slice(t.indexOf("+")) + "</span>", 
+            $(".wotip .tip").html(conHtml);
+            break;
+        } else $(".wotip").hide(), $(".cashVoucher-new,.vouchers").css("width", "49%");
+    }).error(function() {
+        $(".wotip").hide(), $(".cashVoucher-new,.vouchers").css("width", "49%");
+    });
+}
+
+function isUseJf() {
+    if ($(".mui-switch").prop("checked")) {
+        var e = parseFloat(judgeEmpty($("#otherAmount").val()) ? "0" : $("#otherAmount").val()), o = $(".jifenAbleNum").text(), t = parseFloat(o / 100);
+        $(".jfIpt").val(e >= t ? o : 100 * e), $(".jf-all").hide(), $(".jf-left").show(), 
+        $(".jfList .leftPoints").text("0"), $(".jfList .pointsMoney").text(parseFloat(o / 100).toFixed(2));
+        {
+            $(".confirmPay .pointsMoney").text();
+        }
+        checkAndConsumePoint();
+        var a = $(".payFeeMoney b").text();
+        charge.isJfjf && 0 != Number(a) && showPayList(paytypes_jf), $(".jfTips").show();
+    } else $(".jfList .jfIpt").val("0"), checkAndConsumePoint(), $(".jfTips").hide(), 
+    $(".payTypeLists").show();
+}
+
+function judegAgent() {
+    function e(e) {
+        "INPUT" == document.activeElement.nodeName ? e.hide() : e.show();
+    }
+    var o = navigator.userAgent.toLowerCase();
+    if (/iphone|ipad|ipod/.test(o)) $(".inner-cashVoucher span,.vouchers span").css("lineHeight", ".3rem"), 
+    $("#otherAmount").attr("type", "number"), setInterval(function() {
+        e($(".fixedBut"));
+    }, 500); else {
+        $(".inner-cashVoucher span,.vouchers span").css("lineHeight", ".33rem"), $(".chargeInfo span").css("lineHeight", ".32rem"), 
+        $("#otherAmount").attr("type", "tel");
+        var t = $(window).height();
+        $(window).resize(function() {
+            var e = $(this).height();
+            t - e > 50 ? $(".fixedBut").hide() : $(".fixedBut").show();
+        });
+    }
+}
+
+function showIdPage() {
+    confirmNumType("10", !1), $("#netType").text("身份证"), showIdquery();
+}
+
+function tobargain85() {
+    $.ajaxSettings.async = !1, $.ajax({
+        url: getUrl() + "recordTimes?key=bargain85",
+        type: "GET",
+        cache: !1,
+        success: function() {},
+        error: function() {}
+    }), $.ajaxSettings.async = !0, window.location.href = "https://u.10010.cn/qAGSD";
+}
+
+function toAPP() {
+    $.ajaxSettings.async = !1, $.ajax({
+        url: getUrl() + "recordTimes?key=toApp",
+        type: "GET",
+        cache: !1,
+        success: function() {},
+        error: function() {}
+    }), $.ajaxSettings.async = !0, window.location.href = "http://u.10010.cn/qAAei";
+}
+
+function toHalfGd() {
+    $.ajaxSettings.async = !1, $.ajax({
+        url: getUrl() + "recordTimes?key=gdActivity",
+        type: "GET",
+        cache: !1,
+        success: function() {},
+        error: function() {}
+    }), $.ajaxSettings.async = !0, window.location.href = "https://m.client.10010.com/mobileService/openPlatform/openPlatLine.htm?to_url=https://smarthome.17wo.cn/wonetplan/dist/index.html#/pages/index/index?sourceType=STJFCZ1";
+}
+
+function tojdActivity() {
+    $.ajaxSettings.async = !1, $.ajax({
+        url: getUrl() + "recordTimes?key=jdActivity",
+        type: "GET",
+        cache: !1,
+        success: function() {},
+        error: function() {}
+    }), $.ajaxSettings.async = !0, window.location.href = "https://u.10010.cn/qAEGe";
+}
+
+$(function() {
+    $("#number").val(""), $("#hiddenNumber").val(""), $(".pay-button").css("paddingTop", ".1rem"), 
+    $(".payBtnAndWo").hide(), judegAgent(), "wzf" == $("#channelKey").val() && ($(".fix_nav").remove(), 
+    $(".pf-btn-bottom").css("bottom", "0")), (ISWAP || "zljf" == $.trim($("#channelKey").val()) || "wzf" == $.trim($("#channelKey").val())) && ($(".wapElectronInvoice").show(), 
+    $(".clientElectronInvoice").hide(), $(".selectlivingtype").hide()), ISWAP && ($(".vipIcon").hide(), 
+    $(".twoActives .wotip,.twoActives .cashVoucher-new,.twoActives .activetip").hide(), 
+    $(".twoActives .vouchers").css("width", "36%"), $(".services .serviceArr").hide()), 
+    $("#del-num-modify").mouseover(function() {
+        $("#number").unbind("blur", "");
+    }), $("#del-num-modify").mouseout(function() {
+        $("#number").bind("blur", function() {
+            numberBlur();
+        });
+    }), $("#historyNumDiv").mouseover(function() {
+        $("#number").unbind("blur", "");
+    }), $("#historyNumDiv").mouseout(function() {
+        $("#number").bind("blur", function() {
+            numberBlur();
+        });
+    }), $("#fixNumInput").mouseup(function(e) {
+        e.preventDefault();
+    }), $("#number").bind("paste", function(e) {
+        var o = void 0;
+        o = window.clipboardData && window.clipboardData.getData ? window.clipboardData.getData("Text") : e.originalEvent.clipboardData.getData("Text");
+        var t = $("#number").val(), a = t + o;
+        return !judgeEmpty(a) && formateNumGetBasicPhone(a).length > 11 || judgeEmpty(formateNumGetBasicPhone(a)) ? ($("#errormsg").html("请输入正确的手机号码").show(), 
+        void errormsgshow()) : ($("#number").val(formatePhone(a)), void (!judgeEmpty(a) && common.phoneRex.test(formateNumGetBasicPhone(a)) ? checkNumberAuto() : ""));
+    }), $(".knownImg,.tipCloseImg").click(function() {
+        document.body.style.overflow = "visible", document.body.style.overflowY = "visible", 
+        $(".thickdiv,.randomOfferRateTipDiv").hide(), charge.randomDivHide = !1, showRandomRateCss();
+    }), $(".jfAmout .pointsInput,.jfAmout .otherAmoutIpt,.otherAmout .newIpt").focus(function() {
+        $(this).attr("placeholder", "");
+    }), $(".jfAmout .pointsInput").blur(function() {
+        $(this).attr("placeholder", "0");
+    }), $(".jfAmout .otherAmoutIpt,.otherAmout .newIpt").blur(function() {
+        $(this).attr("placeholder", "00.00");
+    }), clientInfo(), initBankchargePage(), clearIdQuery();
+    var e = $("#ticket").val();
+    void 0 != e && "" != e && null != e && (getNewVerifyCode(), needVerifyCode()), computedHei();
+});
+
+var needVerifyCode = function() {
+    var e = verifycodeUrl + "needCode?channelType=" + CHANNEL_TYPE;
+    $.ajax({
+        url: e,
+        type: "GET",
+        cache: !1,
+        dataType: "text",
+        success: function(e) {
+            charge.verifyCodeNew = 0 == e.indexOf("yes") ? !0 : !1;
+        },
+        error: function() {
+            charge.verifyCodeNew = !1;
+        }
+    });
+}, inputAmount = function() {
+    charge.isCouponAllAmount = !1, changePayShow(), $("#pageRandom").removeClass("pageBirthday").addClass("page"), 
+    $("#birthRateDiv").hide();
+}, changeAmount = function() {
+    $(".otherAmout .editIcon").hide(), $(".otherAmout .delOtherIcon").show(), $(this).val($(this).val().replace(/[^0-9.]*/gi, ""));
+    var e = $(this).val();
+    if (!judgeEmpty(e) && (e.indexOf(".") >= 0 ? e.substr(e.indexOf(".")).length > 3 : !1)) return $(this).val(charge.otherAmount), 
+    $("#errormsg").html("请正确输入交费金额").show(), void errormsgshow();
+    if (charge.otherAmount = e.replace(/[^\d\.]/g, ""), charge.otherAmount = parseFloat(Number(charge.otherAmount)).toFixed(2), 
+    $(".payFeeMoney b").text(Number(charge.otherAmount).toFixed(2)), ("04" == common.netCode || "05" == common.netCode || "08" == common.netCode && 1 == charge.is4GNum) && (charge.broadAccountAmount = charge.otherAmount, 
+    judgeEmpty($(".otherBrandInput").val()) ? $(".otherBrandInput").removeClass("amount-ipt-blod") : $(".otherBrandInput").addClass("amount-ipt-blod")), 
+    $(this).parents(".mask").hasClass("jfAmout") && checkAndConsumePoint(), $(".payFeeMoney b").text(t), 
+    charge.isJfjf && Number(points.userPoint) > 0 && $(".mui-switch").prop("checked")) {
+        var o = $(".confirmPay .pointsMoney").text();
+        if (Number(charge.otherAmount - o).toFixed(2) <= 0) {
+            var t = 0;
+            $(".payTypeLists").hide();
+        } else {
+            var t = Number(charge.otherAmount - o).toFixed(2);
+            $(".payTypeLists").show();
+        }
+        if (Number($("#otherAmount").val()) < Number(points.userPoint) / 100) {
+            var a = $("#otherAmount").val(), n = parseFloat(100 * Number(a)).toFixed(2), i = Number(points.userPoint);
+            checkPoint(a, n, i);
+        } else if (!judgeEmpty(points.userPoint) && Number(points.userPoint) > 0) {
+            var a = $("#otherAmount").val(), n = parseFloat(Number(points.userPoint)), i = Number(points.userPoint);
+            checkPoint(a, n, i);
+        }
+    }
+    if (Number($("#otherAmount").val()) < Number(points.userPoint) / 100 && $(".mui-switch").prop("checked")) {
+        var a = $("#otherAmount").val(), n = parseFloat(100 * Number(a)).toFixed(2), i = Number(points.userPoint);
+        checkIptPoint(a, n, i);
+    } else if ($(".mui-switch").prop("checked")) {
+        var a = $("#otherAmount").val(), n = parseFloat(Number(points.userPoint)), i = Number(points.userPoint);
+        checkIptPoint(a, n, i);
+    }
+    showActiveInfo();
+};
+
+$("#otherAmount").focus(function() {
+    $(".otherAmout .editIcon").hide(), $(".otherAmout .delOtherIcon").show();
+}), $("#otherAmount").blur(function() {
+    $(".otherAmout .editIcon").show(), $(".otherAmout .delOtherIcon").hide();
+}), $(".otherAmout .delOtherIcon").mousedown(function(e) {
+    e.preventDefault(), $("#otherAmount").val(""), $(".payFeeMoney b").text("0.00");
+});
+
+var inputPhone = function() {
+    var e = $(".sub-btn b").html(), o = document.getElementById("number");
+    payButton(("0元" != e || "元" != e) && !judgeEmpty($(o).val()) && formateNumGetBasicPhone($(o).val()).length > 11 ? !1 : !0), 
+    inputPhoneShow(!0), inputFixShow(!1), (judgeEmpty($("#number").val()) || !common.phoneRex.test(formateNumGetBasicPhone($("#number").val()))) && $(".custominfos,.customMustPay").html(""), 
+    judgeEmpty($("#number").val()) && hideInvoice(), getHistoryNum("mob"), 0 == $("#addressBookUl li").size() && 1 == common.isLogin && 0 != historyNum.historyNum.length && $("#historyNumDiv").show();
+}, inputFix = function() {
+    charge.getOfferate = !1, inputPhoneShow(!1), inputFixShow(!0), 0 == $("#addressBookUl li").size() && $("#fixHisNumDiv").show(), 
+    getHistoryNum("fix"), common.fixedRex.test(charge.fixPhone) || $(".custominfos,.customMustPay").html("");
+}, chooseFixHistory = function(e, o) {
+    $("#fixPhone").val(e.replace("-", "")), charge.fixCode = e.split("-")[0], charge.fixNum = e.split("-")[1], 
+    charge.fixPhone = e.replace("-", ""), $("#fixCode").val(charge.fixCode), $("#fixPhone").val(charge.fixNum), 
+    $(".custominfos").html(o), $("#addressBookDiv").hide(), confirmFix(!0);
+}, chooseBroadBandHistory = function(e, o) {
+    var t = "04" != common.netCode && "05" != common.netCode && "08" != common.netCode ? e.replace("-", "") : e;
+    changeCharge(), $(".custominfos").html(o), $("#broadHisNumDiv").hide(), "请选择" != $("#netType").text() ? (common.netCode = judgeEmpty(common.netCode) ? common.netDescToCode[$("#netType").text()] : common.netCode, 
+    "03" == common.netCode && common.fixedRex.test(e) ? (charge.fixCode = e.split("-")[0], 
+    charge.fixNum = e.split("-")[1], $("#fixNumInput").val(charge.fixNum).css("fontSize", ".4rem"), 
+    $("#broadNumber").addClass("broad-bold").removeClass("broad-nobold"), $(".septal-line").css("background", "#333"), 
+    0 == cards.cardinfoBroadList.length && ($(".free_notify").attr("free", "").hide(), 
+    getCardList())) : "08" == common.netCode && common.netRex08.test(e) ? (charge.fixCode = getAreaCode(charge.broadProvCode, charge.broadCityCode), 
+    charge.fixNum = e.split("-")[1], 0 == cards.cardinfoBroadList.length && ($(".free_notify").attr("free", "").hide(), 
+    getCardList()), getUserPhoneNumber4gInfo(t)) : "04" != common.netCode && "05" != common.netCode || !/^([\w\-\.\@]){1,30}$/.test(e) ? "10" == common.netCode && $("#broadNumber").val(e) : (charge.broadAccountAmount = judgeEmpty(charge.broadAccountAmount) ? "" : charge.broadAccountAmount, 
+    $(".otherBrandInput").val(charge.broadAccountAmount), changePayShow(), charge.fixCode = getAreaCode(charge.broadProvCode, charge.broadCityCode))) : common.fixedRex.test(e) || common.netRex08.test(e) ? (common.netCode = "03", 
+    charge.fixCode = e.split("-")[0], charge.fixNum = e.split("-")[1], 0 == cards.cardinfoBroadList.length && ($(".free_notify").attr("free", "").hide(), 
+    getCardList())) : /^([\w\-\.\@]){1,30}$/.test(e) && (common.netCode = "04", charge.broadAccountAmount = judgeEmpty(charge.broadAccountAmount) ? "" : charge.broadAccountAmount, 
+    $(".otherBrandInput").val(charge.broadAccountAmount), changePayShow()), showBroadInput("03" == common.netCode ? charge.fixCode : t), 
+    $("#addressBookDiv").hide(), confirmBroadBand(!0);
+}, fixNumSpace = function() {
+    $(".custominfos,.customMustPay").html(""), charge.otherAmount = "", $(".otherInput").eq(1).val(charge.otherAmount).addClass("num-ipt05").removeClass("num-ipt04 num-ipt06"), 
+    $(".other").eq(1).addClass("other-btn").removeClass("other-amount amount-cur"), 
+    $("label.left").eq(1).hide(), inputFixShow(!0), isFixConfirm(), 0 == $("#fixPhone").val().length && 0 == $("#fixCode").val().length && $(".fixed-num .address-book").show();
+}, fixCodeSpace = function() {
+    $("#fixCode").addClass("num-ipt-bold"), inputFixShow(!0), (/^(010)|(02[0-9])$/.test($("#fixCode").val()) || /^0\d{3}$/.test($("#fixCode").val())) && (charge.fixCode = $("#fixCode").val(), 
+    version.iphone != getCookieInfo() && $("#fixPhone").focus(), isFixConfirm()), 0 == $("#fixPhone").val().length && 0 == $("#fixCode").val().length && $(".fixed-num .address-book").show();
+}, isFixConfirm = function() {
+    var e = $("#fixCode").val(), o = $("#fixPhone").val();
+    if (/^(010)|(02[0-9])$/.test($("#fixCode").val()) || /^0\d{3}$/.test($("#fixCode").val())) {
+        var t = fixPhoneLength(e), a = t.is7, n = t.is8;
+        $(".confirm-btn").hide(), a && n ? $(".confirm-btn").show() : a && 7 == o.length ? confirmFix(!1) : n && 8 == o.length && confirmFix(!1);
+    }
+}, phoneNumSpace = function() {
+    $(".mui-switch").prop("checked") && $(".mui-switch").click(), $(".jfList .jfIpt").val(""), 
+    charge.isActionPayfee = !1, changeInputClass("number"), inputPhoneShow(!0), $(".custominfos,.customMustPay").html(""), 
+    charge.otherAmount = "", common.phoneRex.test(formateNumGetBasicPhone($("#number").val())) || ($(".otherInput").eq(0).val(charge.otherAmount).addClass("num-ipt05").removeClass("num-ipt04 num-ipt06"), 
+    $(".other").eq(0).addClass("other-btn").removeClass("other-amount amount-cur"));
+    var e = document.getElementById("number"), o = getPosition(e);
+    /^(\d|\s)$/.test($(e).val().charAt(o - 1)) || (o -= 1);
+    var t = " " == $(e).val().charAt(o - 1);
+    return $(e).val(formatePhone($(e).val())), " " != $(e).val().charAt(o - 1) || t || (o += 1), 
+    setSelectionRange(e, o), !judgeEmpty($(e).val()) && formateNumGetBasicPhone($(e).val()).length > 11 ? ($("#errormsg").html("请输入正确的手机号码").show(), 
+    void errormsgshow()) : (0 == $(e).val().length && $(".mobile-num .address-book").show(), 
+    charge.getOfferate = !1, void (!judgeEmpty($(e).val()) && common.phoneRex.test(formateNumGetBasicPhone($(e).val())) ? checkNumberAuto() : ""));
+}, checkNumberAuto = function() {
+    phoneSure(), $("#number").blur(), $(".pf-btn-bottom").show(), $(".fix_nav").show();
+};
+
+$("#broadBandfix").bind("input keyup", function(e) {
+    e = "03", changeInputClass(getBroadBandInputId()), $(".custominfos,.customMustPay").html(""), 
+    inputBroadBandShow("03" == e ? !1 : !0), judgeEmpty($("#broadBandfix").val()) ? $("#broadBandfix").css({
+        fontSize: ".32rem",
+        "text-align": "left"
+    }) : ($("#broadBandfix").css({
+        fontSize: ".4rem",
+        padding: "0.2rem 0  0",
+        "text-align": "center"
+    }), $("#fixNumInput").css({
+        padding: "0.2rem 0  0"
+    }));
+    var o, t, a = $("#broadBandfix").val();
+    if ("03" == common.netCode && "请选择" != $("#netType").text() && !judgeEmpty(charge.broadProvCode) && !judgeEmpty(charge.broadCityCode)) {
+        var o = $(this).val();
+        t = o.length, /^(010)|(02[0-9])$/.test(o) || /^0\d{3}$/.test(o) ? areaCodeRelation(o) : t >= 4 && ($("#errormsg").html("请输入正确的区号").show(), 
+        errormsgshow()), "03" == common.netCode && judgeEmpty(a) && judgeEmpty($("#fixNumInput").val()) ? $(".septal-line").css("background", "#a9a9a9") : $(".septal-line").css("background", "#333");
+    }
+});
+
+var broadBandNumSpace = function(e) {
+    changeInputClass(getBroadBandInputId()), $(".custominfos,.customMustPay").html(""), 
+    "03" == e ? inputBroadBandShow(!1) : (inputBroadBandShow(!0), "04" == e ? ($("#broadBandAccount").val($("#broadBandAccount").val().replace(/\s/g, "")), 
+    judgeEmpty($("#broadBandAccount").val()) ? $("#broadBandAccount").removeClass("broad-bold").addClass("broad-nobold") : $("#broadBandAccount").removeClass("broad-nobold").addClass("broad-bold")) : "04" == e ? judgeEmpty($("#broadBandPhone").val()) ? $("#broadBandPhone").removeClass("broad-bold").addClass("broad-nobold") : $("#broadBandPhone").removeClass("broad-nobold").addClass("broad-bold") : "10" == e ? ($("#broadNumber").val($("#broadNumber").val().replace(/\s/g, "")), 
+    judgeEmpty($("#broadNumber").val()) ? ($("#broadNumber").removeClass("broad-bold").addClass("broad-nobold"), 
+    $("#idEnter").show()) : ($("#broadNumber").removeClass("broad-nobold").addClass("broad-bold"), 
+    $("#idEnter").hide())) : "08" == e && ($("#broadBandPhone").val($("#broadBandPhone").val().replace(/\s/g, "")), 
+    judgeEmpty($("#broadBandPhone").val()) ? $("#broadBandPhone").removeClass("broad-bold").addClass("broad-nobold") : $("#broadBandPhone").removeClass("broad-nobold").addClass("broad-bold")));
+    var o, t, a = $("#broadBandfix").val();
+    "03" != common.netCode || "请选择" == $("#netType").text() || judgeEmpty(charge.broadProvCode) || judgeEmpty(charge.broadCityCode) || (o = getAreaCode(charge.broadProvCode, charge.broadCityCode), 
+    t = o.length, a.length == t && (a == o ? $("#fixNumInput").focus() : ($("#errormsg").html("输入的区号与选择的省份不匹配").show(), 
+    errormsgshow())), judgeEmpty(a), "03" == common.netCode && judgeEmpty(a) && judgeEmpty($("#fixNumInput").val()) ? $(".septal-line").css("background", "#a9a9a9") : $(".septal-line").css("background", "#333"));
+}, onInput = function() {
+    var e = $("#broadBandfix").val(), o = getAreaCode(charge.broadProvCode, charge.broadCityCode);
+    o = judgeEmpty(o) ? "" : o;
+    var t = o.length;
+    3 == t ? $("#broadBandfix").val(e.substr(0, 3)) : 4 == t ? $("#broadBandfix").val(e.substr(0, 4)) : ($("#errormsg").html("请选择省份地市").show(), 
+    errormsgshow());
+}, clearPhoneNumber = function() {
+    $(".actionPayFee").hide(), $("#number").val(""), $(".custominfos,.customMustPay").html(""), 
+    $(".other").eq(0).hasClass("amount-cur") || (charge.otherAmount = "", $(".otherInput").eq(0).val(charge.otherAmount).addClass("num-ipt05").removeClass("num-ipt04 num-ipt06")), 
+    $("#addressBookDiv").show(), $("#number").focus(), changeInputClass("number"), $(".mobile-num .address-book").show();
+}, clearFixNumber = function() {
+    $("#fixCode").val(""), $("#fixPhone").val(""), charge.fixPhone = "", charge.fixCode = "", 
+    charge.fixNum = "", $(".custominfos,.customMustPay").html(""), $(".other").eq(1).hasClass("amount-cur") || (charge.otherAmount = "", 
+    $(".otherInput").eq(1).val(charge.otherAmount).addClass("num-ipt05").removeClass("num-ipt04 num-ipt06").css("color", "#222")), 
+    $("#fixCode").focus(), changeInputClass("fixPhone"), changeInputClass("fixCode"), 
+    $(".fixed-num .address-book").show();
+}, clearBroadBandNumber = function() {
+    payButton(!0), $("#broadBandPackYear").hasClass("cur") && ($(".payFeeMoney b").html("0.00"), 
+    $(".total b").html("0.00"), $("#idEnter").show()), broadband.bdNumber = "", $(".custominfos,.customMustPay").html(""), 
+    $(".other").eq(2).hasClass("amount-cur") || (charge.otherAmount = "", $(".otherInput").eq(2).val(charge.otherAmount).addClass("num-ipt05").removeClass("num-ipt04 num-ipt06")), 
+    $("#broadBandfix,#fixNumInput,#broadNumber").val(""), $("#broadBandfix").focus(), 
+    common.netCode = judgeEmpty(common.netCode) ? "03" : common.netCode, showBroadInput(""), 
+    changeInputClass(getBroadBandInputId()), $("#broadBandfix").css({
+        width: "14%"
+    }), $("#broadBandfix").css({
+        fontSize: ".32rem",
+        "text-align": "left"
+    }), $("#fixNumInput").css({
+        fontSize: ".32rem"
+    }), $("#broadBandAccount").addClass("broad-nobold").removeClass("broad-bold"), $("#broadNumber").addClass("broad-nobold").removeClass("broad-bold"), 
+    $("#broadBandfix").addClass("num-ipt"), $("#fixNumInput").addClass("num-ipt"), charge.fixCode = "", 
+    "03" == common.netCode && judgeEmpty($("#broadBandfix").val()) && judgeEmpty($("#fixNumInput").val()) && $(".septal-line").css("background", "#a9a9a9"), 
+    $(".userInfoBasic .userInfo").hide(), $(".User_information").hide(), $(".broadbtn button").addClass("gray"), 
+    $(".close").hide(), $(".chosen").hide(), $(".hasChosen").hide(), $(".del-num").hide(), 
+    $(".confirm-btn").hide(), $(".payfeeTypeHref").hide(), broadband.brandNumber = "", 
+    setTimeout(function() {
+        computedHei();
+    }, 500);
+}, changeFontSize = function() {
+    var e = $("#broadBandfix").val();
+    $("#fixNumInput").val($("#fixNumInput").val().replace(/\s/g, "")), charge.fixNum = "", 
+    judgeEmpty($("#fixNumInput").val()) ? $("#fixNumInput").css("fontSize", ".32rem") : ($("#fixNumInput").css("fontSize", ".4rem"), 
+    $("#broadBandfix").css({
+        padding: "0.2rem 0 0"
+    }), $("#fixNumInput").css({
+        padding: "0.2rem 0 0"
+    })), "03" == common.netCode && judgeEmpty(e) && judgeEmpty($("#fixNumInput").val()) ? $(".septal-line").css("background", "#a9a9a9") : $(".septal-line").css("background", "#333"), 
+    charge.otherAmount = "", "03" == common.netCode && ($(".otherInput").eq(2).val(charge.otherAmount).addClass("num-ipt05").removeClass("num-ipt04 num-ipt06"), 
+    $(".other").eq(1).addClass("other-btn").removeClass("other-amount amount-cur"));
+}, broadPhoneEmpty = function() {
+    "请选择" == $("#netType").text() ? judgeEmpty($("#broadBandfix").val()) ? judgeEmpty($("#broadBandAccount").val()) ? judgeEmpty($("#broadBandPhone").val()) || ($("#broadBandPhone").val(""), 
+    $("#broadBandPhone").val("").attr("class", "broad-ipt").css("color", "")) : ($("#broadBandAccount").val(""), 
+    $("#broadBandAccount").val("").attr("class", "broad-ipt").css("color", "")) : ($("#broadBandfix").val(""), 
+    $("#broadBandfix").val("").attr("class", "broad-ipt").css("color", "").css("fontSize", ".4rem")) : ($("#broadBandAccount,#broadBandfix,#broadBandPhone").val(""), 
+    common.netCode = "03"), showBroadInput();
+}, phoneSure = function(e) {
+    $(".mui-switch").prop("checked") && $(".mui-switch").click(), $(".jfList .jfIpt").val(""), 
+    removePointPay(), inputPhoneShow(!1), $(".custominfos,.customMustPay").html("");
+    var o = $("#number").val();
+    return judgeEmpty(o) ? ($("#errormsg").html("请输入手机号码").show(), void errormsgshow()) : (0 != o.charAt("(") && judgeEmpty(o) || e || ($("#addressBookDiv").hide(), 
+    o = parseNumber(o)), common.phoneRex.test(formateNumGetBasicPhone(o)) ? (isFixedTab() && !common.fixedRex.test(formateNumGetBasicPhone(charge.fixPhone)) && clearFix(), 
+    phoneInvoiceInfo(), pointPhone4G(), inputPhoneShow(!1), void inputFixShow(!1)) : ($("#errormsg").html("请输入正确的手机号码").show(), 
+    void errormsgshow()));
+}, formatFixPhone = function(e, o) {
+    if ($(".customInfo").show(), "04" != common.netCode && "08" != common.netCode && "10" != common.netCode && (e = e.replace("-", ""), 
+    /^(010)|(02[0-9])$/.test(e.substr(0, 3)) ? (charge.fixCode = e.substr(0, 3), charge.fixNum = e.substr(3), 
+    $("#fixNum").val(e.substr(3))) : /^0\d{3}$/.test(e.substr(0, 4)) && (charge.fixCode = e.substr(0, 4), 
+    $("#fixNum").val(e.substr(4)), charge.fixNum = e.substr(4))), "fix" == o) {
+        if ($("#fixPhone").hasClass("num-ipt")) return void $(".customInfo").hide();
+        $("#fixCode").val(charge.fixCode), $("#fixPhone").val(charge.fixNum);
+    } else "03" == common.netCode;
+}, isAreaCode = function() {
+    var e = isFixedTab() ? charge.fixCode : $("#broadBandfix").val();
+    return /^(010)|(02[0-9])$/.test(e) || /^0\d{3}$/.test(e) ? 0 != getProvinceCodeByAreaCode(e) ? ($("#fixNum").focus(), 
+    !0) : ($("#errormsg").html("请输入正确的区号").show(), errormsgshow(), !1) : void 0;
+}, clearPhone = function() {
+    $("#number").val(""), $("#number").attr("class", "num-ipt");
+}, clearFix = function() {
+    charge.fixNum = "", charge.fixCode = "", charge.fixPhone = "", $("#fixPhone").val(""), 
+    $("#fixPhone").attr("class", "num-ipt").css("color", ""), clearBroadBand();
+}, clearBroadBand = function() {
+    $("#broadBandAccount,#broadBandfix,#broadBandPhone,#fixNumInput").val(""), $("#netType").text("请选择"), 
+    $(".sel-city").html("<i>请选择</i>"), common.netCode = "03", showBroadInput("");
+}, broadBandClearOthers = function() {
+    clearPhoneForm();
+    var e = "03" == common.netCode || "08" == common.netCode ? !0 : !1;
+    clearFixForm(e);
+}, clearPhoneForm = function() {
+    $("#number").val(""), $("#number").attr("class", "num-ipt");
+}, clearFixForm = function(e) {
+    (!e || judgeEmpty(e)) && (charge.fixNum = "", charge.fixCode = ""), charge.fixPhone = "", 
+    $("#fixPhone").val(""), $("#fixPhone").attr("class", "num-ipt").css("color", "");
+}, confirmFix = function(e) {
+    if (removePointPay(), $(".custominfos,.customMustPay").html(""), inputFixShow(!1), 
+    judgeEmpty(charge.fixPhone) && judgeEmpty($("#fixPhone").val())) return $("#errormsg").html("请输入固话号码").show(), 
+    void errormsgshow();
+    if ((judgeEmpty(charge.fixPhone) || !judgeEmpty($("#fixPhone").val())) && !e && ($("#addressBookDiv").hide(), 
+    charge.fixPhone = judgeEmpty($("#fixPhone").val()) ? charge.fixPhone : $("#fixCode").val() + parseNumber($("#fixPhone").val()), 
+    common.fixedRex.test(charge.fixPhone) && (formatFixPhone(charge.fixPhone, "fix"), 
+    !isAreaCode()))) return $("#errormsg").html("请输入正确的固话号码").show(), errormsgshow(), 
+    void $("#fixPhone").focus();
+    if (!common.fixedRex.test(charge.fixCode + "-" + charge.fixNum) && !common.phoneRex.test(formateNumGetBasicPhone(charge.fixPhone))) return $("#errormsg").html("请输入正确的固话号码").show(), 
+    void errormsgshow();
+    if (common.phoneRex.test(formateNumGetBasicPhone(charge.fixPhone)) && !e) {
+        inputPhoneShow(!0);
+        var o = charge.fixPhone.replace(/[^\d()+]/g, "").substr(0, 11).replace(/(^\d{3}|\d{4})\B/g, "$1 ");
+        return $("#number").val(o), void phoneBannerShow(!0);
+    }
+    fixInvoiceInfo(), common.phoneRex.test(formateNumGetBasicPhone($("#number").val())) || clearPhone(), 
+    pointPhone4G(), setTimeout(function() {
+        computedHei();
+    }, 500);
+}, parseNumber = function(e) {
+    if (judgeEmpty(e)) return "";
+    0 == e.indexOf("+86") && (e = e.substr(3));
+    for (var o = "", t = e.indexOf("(") > 0 ? e.indexOf("(") : e.length, a = 0; t > a; a++) /^\d$/.test(e.charAt(a)) && (o += e.charAt(a));
+    return o;
+}, phoneInvoiceInfo = function() {
+    var e = $("#number").val();
+    judgeEmpty(e) || $.getJSON(nginxRequstURL + "getArea/init?callback=?", {
+        "commonBean.phoneNo": formateNumGetBasicPhone(e)
+    }, function(o) {
+        if (charge.provinceCode = o.prov.split("X")[0], charge.cityCode = o.prov.split("X")[1], 
+        void 0 == o.prov.split("X")[2] || o.prov.split("X")[0].length < 3) return inputPhoneShow(!0), 
+        $("#errormsg").html("对不起,暂不支持该号码交费！").show(), errormsgshow(), void payButton(!0);
+        var t = area.municipality.indexOf(charge.provinceCode) >= 0 ? "" : getProvinceName(charge.provinceCode), a = getCityName(charge.provinceCode, charge.cityCode);
+        "051" != charge.provinceCode || ISWAP ? ($(".vouchers-half").hide(), $(".vouchers,.cashVoucher-new").css("width", "49%")) : ($(".vouchers-half").show(), 
+        $(".vouchers,.vouchers-half,.cashVoucher-new").css("width", "32%")), getCustomInfo(e.replace(/\s+/g, ""), t, a), 
+        getInvoiceConfig(charge.provinceCode, charge.cityCode), getOfferRate(), getMustPayFee(), 
+        isNotNext && !ISWAP ? getCBRealActivityPayFeeContent() : isNotNext = !0, ("undefined" != typeof common.isLogin && 0 == common.isLogin || null == common.loginProvince) && (messageTips.inputNumProvince = charge.provinceCode, 
+        fillMessagetips(messageTips.servieType));
+    });
+}, fixInvoiceInfo = function() {
+    var e = "", o = "";
+    if (!judgeEmpty(charge.fixCode)) {
+        var t = getProvinceCodeByAreaCode(charge.fixCode);
+        charge.fixProvinceCode = t.pno, messageTips.inputNumProvince = charge.fixProvinceCode, 
+        fillMessagetips(messageTips.servieType), charge.fixCityCode = t.id, e = area.municipality.indexOf(charge.fixProvinceCode) >= 0 ? "" : getProvinceName(charge.fixProvinceCode), 
+        o = t.name, isFixedTab() && getInvoiceConfig(charge.fixProvinceCode, charge.fixCityCode);
+    }
+    getOfferRate(), $("#fixPhone").blur(), getCustomInfo(getChargePhone(), e, o), getMustPayFee();
+}, phoneBannerShow = function(e) {
+    return $(".mui-switch").prop("checked") && $(".mui-switch").click(), $(".jfList .jfIpt").val(""), 
+    messageTips.servieType = "mobbankcharge", ISWAP ? ($(".twoActives").show(), $(".twoActives .vouchers").show()) : ($(".qqvip").show(), 
+    $(".twoActives,.twoActives .cashVoucher-new,.vouchers").show()), $(".broadbtn").hide(), 
+    checkIsConfirm(), $(".moreContent").show(), charge.isCouponAllAmount = !1, isPackYear = !1, 
+    charge.getOfferate = !1, removePointPay(), changeMobileTab(), inputPhoneShow(!1), 
+    inputFixShow(!1), inputBroadBandShow(!1), $(".custominfos,.customMustPay").html(""), 
+    changeCharge(), $(".free_notify").attr("free", "").hide(), $(".mustpaytip").css("visibility", "hidden"), 
+    computedHei(), messageTips.inputNumProvince = "", charge.serviceType != messageTips.servieType && fillMessagetips(messageTips.servieType), 
+    judgeEmpty($("#number").val()) ? (0 == cards.cardinfoList.length && getCardList(), 
+    void (e ? phoneInvoiceInfo() : getInvoiceConfig(charge.provinceCode, charge.cityCode))) : void phoneSure(!1);
+}, fixBannerShow = function() {
+    if ($(".mui-switch").prop("checked") && $(".mui-switch").click(), $(".jfList .jfIpt").val(""), 
+    messageTips.servieType = "fixbankcharge", $(".qqvip").hide(), $(".broadbtn").hide(), 
+    $(".twoActives,.vouchers").hide(), ISWAP && $(".twoActives").hide(), checkIsConfirm(), 
+    $(".cashVoucher,.moreContent").hide(), charge.isCouponAllAmount = !1, charge.randomOfferateFlag = !1, 
+    charge.isBirthActivity = !1, isPackYear = !1, charge.getOfferate = !1, common.netCode = "", 
+    $(".actionPayFee").hide(), $(".fixed-other").show(), removePointPay(), hideRandomRateCss(), 
+    hideBirth(), changeFixedTab(), inputPhoneShow(!1), inputFixShow(!1), inputBroadBandShow(!1), 
+    $(".custominfos,.customMustPay").html(""), changeCharge(), $(".free_notify").attr("free", "").hide(), 
+    $(".mustpaytip").css("visibility", "hidden"), changeInputClass("fixPhone"), null != charge.fixNum && "0" == charge.fixNum.charAt("0") && $(".fixed-other").hide(), 
+    messageTips.inputNumProvince = "", charge.serviceType != messageTips.servieType && fillMessagetips(messageTips.servieType), 
+    isFixedTab() && common.fixedRex.test(formateNumGetBasicPhone(charge.fixPhone))) {
+        formatFixPhone(charge.fixPhone, "fix");
+        var e = getProvinceCodeByAreaCode(charge.fixCode), o = area.municipality.indexOf(charge.fixProvinceCode) >= 0 ? "" : getProvinceName(charge.fixProvinceCode), t = e.name;
+        return getCustomInfo(charge.fixNum, o, t), getMustPayFee(), void getInvoiceConfig(charge.fixProvinceCode, charge.fixCityCode);
+    }
+    hideInvoice(), 0 == cards.cardinfoFixList.length && getCardList(), computedHei();
+}, broadTypeNewProvince = function() {
+    return judgeEmpty(onlineBroadNewTypeProvince) ? void $.ajax({
+        type: "post",
+        data: {},
+        dataType: "json",
+        url: serviceBankchargeURL + "broadbandPackYear/broadNewTypeProvince"
+    }).success(function(e) {
+        (null != e.newBroadType || "" != e.newBroadType) && (onlineBroadNewTypeProvince = e.newBroadType.split(","), 
+        clickBroadPayFee());
+    }).error(function() {
+        onlineBroadNewTypeProvince = "", clickBroadPayFee();
+    }) : void clickBroadPayFee();
+}, broadBandBannerShow = function() {
+    if ($(".mui-switch").prop("checked") && $(".mui-switch").click(), $(".jfList .jfIpt").val(""), 
+    messageTips.servieType = "broadbandbankcharge", $(".qqvip").hide(), $(".custominfos,.customMustPay").html(""), 
+    $(".twoActives,.vouchers").hide(), ISWAP && $(".twoActives").hide(), checkIsConfirm(), 
+    removePointPay(), $(".cashVoucher,.moreContent").hide(), charge.isCouponAllAmount = !1, 
+    charge.getOfferate = !1, $("#cardnumber").removeClass("num-ipt-m").addClass("broad-ipt-m"), 
+    $(".paidCard").css("height", ".8rem"), $(".broad-ipt-m").css("padding", ".2rem 0"), 
+    $(".actionPayFee").hide(), hideRandomRateCss(), hideBirth(), changeBroadTab(), hideInvoice(), 
+    common.netCode = "请选择" == $("#netType").text() ? "10" : common.netDescToCode[$("#netType").text()], 
+    inputPhoneShow(!1), inputFixShow(!1), inputBroadBandShow(!1), $("#broadNumber").hide(), 
+    $("#broadBandfix").css("width", "14%").show(), judgeEmpty($("#broadBandfix").val()) ? $("#broadBandfix").css("fontSize", ".32rem") : $("#broadBandfix").css("fontSize", ".4rem"), 
+    judgeEmpty($(".fix_num").val()) ? $(".fix_num").css("fontSize", ".32rem") : $(".fix_num").css("fontSize", ".4rem"), 
+    $(".free_notify").attr("free", "").hide(), $(".mustpaytip").css("visibility", "hidden"), 
+    0 == cards.cardinfoBroadList.length && getCardList(), "宽带账号" == $("#netType").text() && (common.netCode = "04", 
+    changePayShow()), showBroadInput($("#broadBandfix").val()), isFixedTab() && !common.fixedRex.test(charge.fixPhone) && broadBandClearOthers(), 
+    showBroadBandPro(charge.broadProvCode, charge.broadCityCode), $("#broadBandPayFee").addClass("cur").siblings().removeClass("cur"), 
+    broadTypeNewProvince(), isBroadTab() && common.fixedRex.test(getBroadBandPhone())) {
+        {
+            var e = getProvinceCodeByAreaCode(charge.fixCode);
+            area.municipality.indexOf(charge.fixProvinceCode) >= 0 ? "" : getProvinceName(charge.fixProvinceCode), 
+            e.name;
+        }
+        if (formatFixPhone(getBroadBandPhone(), "broad"), !verifyMustpayInfo()) return void sameNumberMustPayMent();
+        "" != $("#fixNumInput").val() && confirmBroadBand(!1);
+    }
+    judgeEmpty(getBroadBandPhone()) || confirmBroadBand(!1), changeCharge(), judgeEmpty($("#broadBandfix").val()) || $(".septal-line").css("background", "#333"), 
+    boradBandOnline(), computedHei();
+}, livingpageShow = function() {
+    var e = "livingpay/index.html", o = $("#number").val();
+    judgeEmpty(o) && (o = judgeEmpty(GetRequest("phone")) ? "" : GetRequest("phone")), 
+    isMobileTab() ? e = e + "?serviceType=01&chargeWay=01&phone=" + o.replace(/\s+/g, "") : isFixedTab() ? e = e + "?serviceType=03&chargeWay=01&phone=" + $("#fixPhone").val() : isBroadTab() ? e += "?serviceType=03&bussTypeIn=04&chargeWay=01" : e = e + "?serviceType=01&chargeWay=01&phone=" + o.replace(/\s+/g, ""), 
+    window.location.href = ISWAP ? "/npfwap/npfMobWap/" + e : "/npfwap/npfMobWeb/" + e;
+}, showBroadBandPro = function(e, o) {
+    judgeEmpty(e) || judgeEmpty(o) ? !common.isLogin || judgeEmpty(common.loginProvince) || judgeEmpty(common.loginCity) ? judgeEmpty(common.ipProv) || "00|000" == common.ipProv || (e = common.ipProv.split("|")[0], 
+    o = common.ipProv.split("|")[1], e = e.length <= 2 ? "0" + e : e, confirmProv(e, getProvinceName(e), !0), 
+    confirmCity(getCityName(e, o), e, o, !0)) : (confirmProv(common.loginProvince, getProvinceName(common.loginProvince), !0), 
+    confirmCity(getCityName(common.loginProvince, common.loginCity), common.loginProvince, common.loginCity, !0)) : (confirmProv(e, getProvinceName(e), !0), 
+    confirmCity(getCityName(e, o), e, o, !0));
+}, checkIsConfirm = function() {
+    charge.inputPhoneShow && !common.phoneRex.test($.trim($("#number").val())) ? clearPhoneNumber() : charge.inputFixShow && !common.fixedRex.test(charge.fixPhone) ? (charge.fixPhone = "", 
+    clearFixNumber()) : charge.inputBoradBandShow && clearBroadBand();
+}, inputBroadBand = function(e) {
+    $(".custominfos,.customMustPay").html(""), common.netCode = e, charge.fixCode = $("#broadBandfix").val(), 
+    ("08" == e || "04" == e || "10" == e) && (charge.fixCode = getAreaCode(charge.broadProvCode, charge.broadCityCode)), 
+    "03" == e ? showBroadInput(charge.fixCode, !1) : showBroadInput(getBroadBandPhone(), !1), 
+    inputBroadBandShow(!0), inputFixShow(!1), judgeEmpty(e) || (judgeEmpty(getBroadBandPhone()) && 0 == $("#addressBookUl li").size() && $("#broadHisNumDiv").show(), 
+    getHistoryNum("broad"));
+};
+
+$("#broadNumber").on("blur", function() {
+    $(".confirm-btn-broad").is(":visible") || $("#idEnter").show();
+});
+
+var fixCodeFocus = function(e) {
+    common.netCode = e, "03" == e && $("#broadHisNumDiv").hide();
+};
+
+pasteNum($("#broadNumber")), pasteNum($("#broadBandAccount")), pasteNum($("#broadBandPhone"));
+
+var confirmBroadBand = function() {
+    if ($("#addressBookDiv").hide(), $("#broadHisNumDiv").hide(), removePointPay(), 
+    1 == isPackYear) return InputConfirm(), void fixInvoiceInfo();
+    "" == $(".otherBrandInput").val() && ($(".amount-list-broad").removeClass("amount-cur"), 
+    $(".payFeeMoney b").html("0.00"), $(".total b").html("0.00")), inputBroadBandShow(!1);
+    var e = getBroadBandPhone();
+    if (judgeEmpty(e) && (charge.is4GNum = !1), isBroadTab() && !testFixedCode(common.netCode, e) && "请选择" != $("#netType").text() && !common.phoneRex.test(formateNumGetBasicPhone(e))) return judgeEmpty($("#fixNumInput").val()) || "03" != common.netCode ? "10" == common.netCode && ($("#errormsg").html("请输入正确的宽带编码").show(), 
+    errormsgshow()) : ($("#errormsg").html("请输入正确的固话号码").show(), errormsgshow()), !1;
+    if (isBroadTab() && "04" == common.netCode && !testBandAccount(e) && !common.phoneRex.test(formateNumGetBasicPhone(e))) return $("#errormsg").html("请输入正确的宽带账号/编码").show(), 
+    errormsgshow(), !1;
+    if (formatFixPhone(e, "broad"), isBroadTab() && (judgeEmpty(charge.broadProvCode) || judgeEmpty(charge.broadCityCode))) return $("#errormsg").html("请选择省份地市").show(), 
+    errormsgshow(), !1;
+    if (isBroadTab() && "请选择" == $("#netType").text()) return $("#errormsg").html("请选择号码类型").show(), 
+    errormsgshow(), !1;
+    if (isBroadTab() && !judgeEmpty(charge.broadProvCode) && "与宽带绑定的固话" == $("#netType").text()) {
+        var o = getAreaCode(charge.broadProvCode, charge.broadCityCode);
+        if ("与宽带绑定的固话" == $("#netType").text() && o != $("#broadBandfix").val()) return $("#errormsg").html("输入的号码与选择的省份不匹配").show(), 
+        errormsgshow(), !1;
+        if (o != charge.fixCode) return $("#errormsg").html("输入的号码与选择的省份不匹配").show(), errormsgshow(), 
+        !1;
+    }
+    fixInvoiceInfo(), common.phoneRex.test(formateNumGetBasicPhone($("#number").val())) || clearPhone(), 
+    pointPhone4G(), "08" == common.netCode && getUserPhoneNumber4gInfo(e), setTimeout(function() {
+        computedHei();
+    }, 500);
+}, getUrlParam = function() {
+    var e = GetRequest("serviceType");
+    if (judgeEmpty($("#number").val()) && !isMobileTab() || judgeEmpty(charge.fixNum) && !isFixedTab() || judgeEmpty(getBroadBandPhone()) && !isBroadTab() || !judgeEmpty(e)) {
+        var o, t = JSON.parse(sessionStorage.getItem("actSession"));
+        $.isEmptyObject(t) || judgeEmpty(t.phoneNo) ? o = GetRequest("phone") : (o = t.phoneNo, 
+        sessionStorage.removeItem("actSession"));
+        var a = GetRequest("bussTypeIn"), n = GetRequest("pro"), i = GetRequest("city");
+        e = $.inArray(e, [ "01", "06", "29" ]) >= 0 ? "" : e, judgeEmpty(e) || judgeEmpty(a) ? judgeEmpty(e) && (judgeEmpty(o) || common.phoneRex.test(o)) ? (changeMobileTab(), 
+        judgeEmpty(o) || (common.phoneRex.test(o) && ($("#number").val(formatePhone(o)), 
+        changeInputClass("number")), charge.randomOfferateFlag && $(".thickdiv,.randomOfferRateTipDiv").show())) : (fixBannerShow(), 
+        common.fixedRex.test(o) && (charge.fixPhone = o.replace("-", ""), charge.fixCode = o.split("-")[0], 
+        charge.fixNum = o.split("-")[1], $("#fixCode").val(charge.fixCode), $("#fixPhone").val(charge.fixNum), 
+        confirmFix(!1))) : (broadBandBannerShow(), "02" == a && common.fixedRex.test(o) ? (charge.fixPhone = o.replace("-", ""), 
+        charge.fixCode = o.split("-")[0], charge.fixNum = o.split("-")[1], confirmNumType("03", !0), 
+        $("#broadBandfix").val(charge.fixCode), $("#fixNumInput").val(charge.fixNum), changeFontSize(), 
+        confirmBroadBand(!1)) : judgeEmpty(o) || judgeEmpty(n) || judgeEmpty(i) || (showBroadBandPro(n, i), 
+        $("#broadNumber").val(o), inputBroadBand("10"), confirmBroadBand(!1))), common.phoneRex.test(o) && judgeEmpty($("#number").val()) && $("#number").val(formatePhone(o));
+    }
+}, getCustomInfo = function(e, o, t) {
+    if (!(isMobileTab() && judgeEmpty($("#number").val()) || isFixedTab() && judgeEmpty($("#fixPhone").val()) || isBroadTab() && judgeEmpty(getBroadBandPhone()) || isBroadTab() && "-" == getBroadBandPhone())) {
+        var a = "";
+        if (null != common.loginPhoneNo && "" != common.loginPhoneNo && common.loginPhoneNo.indexOf("-") > 0) {
+            var n = common.loginPhoneNo.indexOf("-");
+            a = common.loginPhoneNo.slice(n + 1);
+        } else a = common.loginPhoneNo;
+        var i = "customInfo/cellInfoQuery";
+        $.ajax({
+            type: "post",
+            url: isFixedTab() ? fixBankchargeURL + i : serviceBankchargeURL + i,
+            data: {
+                loginPhoneNo: a,
+                "commonBean.phoneNo": "04" == common.netCode ? "" : e,
+                "commonBean.provinceCode": isMobileTab() ? charge.provinceCode : isFixedTab() ? charge.fixProvinceCode : charge.broadProvCode,
+                "commonBean.cityCode": isMobileTab() ? charge.cityCode : isFixedTab() ? charge.fixCityCode : charge.broadCityCode,
+                "commonBean.areaCode": isFixedTab() || isBroadTab() ? charge.fixCode : "",
+                bussineTypeInput: isMobileTab() ? "" : isFixedTab() ? "1" : "2",
+                "commonBean.netAccount": "03" == common.netCode ? "" : isBroadTab() ? getBroadBandPhone() : "",
+                "commonBean.netCode": isMobileTab() ? "" : common.netCode
+            },
+            dataType: "json"
+        }).success(function(e) {
+            $("#broadband").hasClass("select") && 3 == $("#broadBandfix").val().length ? $(".customInfo").css("margin-left", ".1rem") : $(".customInfo").css("margin-left", ".08rem"), 
+            e.isLogin ? "08" != common.netCode ? isBroadTab() && $("#broadBandfix").val().length + $("#fixNumInput").val().length < 10 && "03" == common.netCode ? $(".broadband .custominfos").html(e.custName).show() : (!judgeEmpty(t) && t.length > 3 && (t = t.slice(0, 3) + "..."), 
+            isMobileTab() ? $(".mobile-num .custominfos").html("" != e.custName ? e.custName + "(" + t + ")" : t).show() : !isBroadTab() || judgeEmpty($("#fixNumInput").val()) && judgeEmpty($("#broadNumber").val()) ? isFixedTab() && $(".fixed-num .custominfos").html("" != e.custName ? e.custName + "(" + t + ")" : t).show() : $(".broadband .custominfos").html("" != e.custName ? e.custName : t).show()) : (!judgeEmpty(t) && t.length > 3 && (t = t.slice(0, 3) + "..."), 
+            $(".custominfos").html(t).show()) : isBroadTab() && $("#broadBandfix").val().length + $("#fixNumInput").val().length < 10 && "03" == common.netCode ? $(".broadband .custominfos").html("") : isFixedTab() ? $(".telephone-num .custominfos").html(t).show() : isMobileTab() ? $(".mobile-num .custominfos").html(t).show : isBroadTab() && $(".broadband .custominfos").html(t).show(), 
+            2 == $(".broadband input:visible").length ? (judgeEmpty($("#broadBandfix").val()) || judgeEmpty($("#fixNumInput").val())) && $(".broadband .custominfos,.broadband .customMustPay").hide() : judgeEmpty($(".broadband input:visible").val()) && $(".broadband .custominfos,.broadband .customMustPay").hide(), 
+            2 == $(".fix-num  input:visible").length && (judgeEmpty($("#fixCode").val()) || judgeEmpty($("#fixPhone").val())) && $(".fix-num .custominfos,.fix-num .customMustPay").hide();
+        }).error(function() {
+            $(".custominfos").html(o + " " + t).show();
+        });
+    }
+}, initBankchargePage = function() {
+    ISWAP && $(".fix_nav_four").hide(), common.isIntimatepayfee = !1, getUrlParam(), 
+    getLoginUserInfo(), (isFixedTab() && 0 == cards.cardinfoFixList.length || isMobileTab() && 0 == cards.cardinfoList.length || isBroadTab() && 0 == cards.cardinfoBroadList.length) && ($(".free_notify").attr("free", "").hide(), 
+    getCardList()), !judgeEmpty(charge.fixNum) && isFixedTab() && fixInvoiceInfo();
+}, initPageAfterUserInfo = function() {
+    if (common.isLogin && (querySaleOrder(), removePointPay(), pointPhone4G(), fillMessagetips(getMessageType()), 
+    carousel()), isMobileTab()) judgeEmpty($("#number").val()) && common.phoneRex.test(common.loginPhoneNo) && ($("#number").val(formatePhone(common.loginPhoneNo)), 
+    changeInputClass("number")), judgeEmpty($("#number").val()) || phoneSure(!1); else if (isFixedTab()) judgeEmpty(charge.fixPhone) && common.fixedRex.test(common.loginPhoneNo) && (charge.fixPhone = common.loginPhoneNo.replace("-", ""), 
+    charge.fixCode = common.loginPhoneNo.split("-")[0], charge.fixNum = common.loginPhoneNo.split("-")[1], 
+    $("#fixCode").val(charge.fixCode), $("#fixPhone").val(charge.fixNum), confirmFix(!1)); else if (isBroadTab()) {
+        judgeEmpty(charge.broadProvCode) && showBroadBandPro(), common.phone_login.indexOf(common.loginType) < 0 && (common.fixedRex.test(common.loginPhoneNo) && judgeEmpty($("#fixNumInput").val()) && judgeEmpty($("#broadNumber").val()) ? (showBroadBandPro(), 
+        charge.fixPhone = common.loginPhoneNo.replace("-", ""), charge.fixCode = common.loginPhoneNo.split("-")[0], 
+        charge.fixNum = common.loginPhoneNo.split("-")[1], confirmNumType("03", !0), $("#broadBandfix").val(charge.fixCode), 
+        $("#fixNumInput").val(charge.fixNum), changeFontSize(), confirmBroadBand(!1)) : judgeEmpty($("#broadNumber").val()) && (showBroadBandPro(), 
+        $("#broadNumber").val(common.loginPhoneNo.substr(common.loginPhoneNo.indexOf("-") + 1)), 
+        inputBroadBand("10"), confirmBroadBand(!1)));
+        var e = GetRequest("serviceType"), o = GetRequest("bussTypeIn");
+        judgeEmpty(e) || judgeEmpty(o) || "3" != o || (inputBroadBand("10"), $.ajaxSettings.async = !1, 
+        InitBroadband(), $.ajaxSettings.async = !0, $("#broadBandPackYear").click(), confirmNumType("10", !0));
+    }
+    common.phoneRex.test(common.loginPhoneNo) && judgeEmpty($("#number").val()) ? $("#number").val(formatePhone(common.loginPhoneNo)) : common.fixedRex.test(common.loginPhoneNo) && judgeEmpty($("#fixPhone").val()) ? (formatFixPhone(common.loginPhoneNo, "fix"), 
+    $("#fixCode").val(charge.fixCode), $("#fixPhone").val(charge.fixNum)) : common.phoneRex.test(common.loginPhoneNo) || common.fixedRex.test(common.loginPhoneNo) || !judgeEmpty($("#broadNumber").val()) || $("#broadNumber").val(common.loginPhoneNo.substr(common.loginPhoneNo.indexOf("-") + 1)), 
+    clientInfo();
+}, initPageAfterIpInfo = function() {
+    common.isLogin || (isBroadTab() && judgeEmpty(charge.broadProvCode) && showBroadBandPro(), 
+    fillMessagetips(getMessageType()), carousel());
+}, mustpayFeeInfo = null, fixmustpayFeeInfo = null, broadmustpayFeeInfo = null, leftFeeInfo = null, getMustPayFee = function() {
+    var e = isMobileTab() ? "Mustpayment/getMustpayment.action" : "fMustpayment/getMustpayment.action";
+    if (!verifyMustpayInfo()) return void sameNumberMustPayMent();
+    if (!isBroadTab() || !isPackYear) {
+        var o = isFixedTab() || isBroadTab() ? "04" == common.netCode || "10" == common.netCode ? getBroadBandPhone() : charge.fixNum : formateNumGetBasicPhone($("#number").val()), t = "10" == common.netCode ? "04" : common.netCode;
+        $("#hiddenNumber").val(o);
+        var a = isMobileTab() ? "mobileBanner" : isFixedTab() ? "fixBanner" : "broadBanner";
+        $.ajax({
+            type: "post",
+            url: isFixedTab() ? fixBankchargeURL + e : serviceBankchargeURL + e,
+            data: {
+                number: o,
+                bussineTypeInput: isMobileTab() ? "" : isFixedTab() ? "1" : "2",
+                areacode: isFixedTab() || isBroadTab() ? charge.fixCode : "",
+                provincecode: isMobileTab() ? charge.provinceCode : isFixedTab() ? charge.fixProvinceCode : charge.broadProvCode,
+                numbertype: t,
+                citycode: isMobileTab() ? charge.cityCode : isFixedTab() ? charge.fixCityCode : charge.broadCityCode,
+                isWap: ISWAP ? "1" : "0"
+            },
+            dataType: "json"
+        }).success(function(e) {
+            if (leftFeeInfo = e.feeinfo, "success" != e.out) return void $(".customMustPay").html("").hide();
+            if ($("#broadband").hasClass("select") && 3 == $("#broadBandfix").val().length ? $(".customInfo").css("margin-left", ".1rem") : $(".customInfo").css("margin-left", ".08rem"), 
+            isMobileTab() && "mobileBanner" == a) if (mustpayFeeInfo = e.mustPay, $(".fixed-num .customMustPay").html("").hide(), 
+            $(".broad-num .customMustPay").html("").hide(), "0000" == e.rspCode && null != e.feeinfo && e.feeinfo > 0) $(".mobile-num .customMustPay").html(" | 余额:<b class='redlabel'>" + e.feeinfo + "元</b>").show(), 
+            charge.otherAmount = "", $(".mustpaytip").css("visibility", "hidden"); else {
+                if (e.mustPay > 0) $(".mustpaytip").text("已欠费" + e.mustPay + "元").css("visibility", "visible"), 
+                charge.otherAmount = judgeEmpty(charge.otherAmount) ? e.mustPay : charge.otherAmount; else {
+                    {
+                        judgeEmpty(charge.otherAmount) ? "" : charge.otherAmount;
+                    }
+                    $(".mustpaytip").css("visibility", "hidden");
+                }
+                $(".mobile-num .customMustPay").html(" | 欠费:<b class='redlabel'>" + e.mustPay + "元</b>").show();
+            } else isFixedTab() && "fixBanner" == a ? (fixmustpayFeeInfo = e.mustPay, $(".mobile-num .customMustPay").html("").hide(), 
+            $(".broad-num .customMustPay").html("").hide(), $(".fixed-num .customMustPay").html(" | 欠费:<b class='redlabel'>" + e.mustPay + "元</b>").show(), 
+            e.mustPay > 0 ? ($(".mustpaytip").text("已欠费" + e.mustPay + "元").css("visibility", "visible"), 
+            charge.otherAmount = judgeEmpty(charge.otherAmount) ? e.mustPay : charge.otherAmount) : (charge.otherAmount = "", 
+            $(".mustpaytip").css("visibility", "hidden"))) : (broadmustpayFeeInfo = e.mustPay, 
+            $(".mobile-num .customMustPay").html("").hide(), $(".fixed-num .customMustPay").html("").hide(), 
+            judgeEmpty($("#fixNumInput").val()) && judgeEmpty($("#broadNumber").val()) || ("" == $(".broadband .custominfos").text() ? $(".broad-num .customMustPay").html("欠费:<b class='redlabel'>" + e.mustPay + "元</b>").show() : $(".broad-num .customMustPay").html(" | 欠费:<b class='redlabel'>" + e.mustPay + "元</b>").show()), 
+            e.mustPay > 0 ? ($(".mustpaytip").text("已欠费" + e.mustPay + "元").css("visibility", "visible"), 
+            charge.otherAmount = judgeEmpty(charge.otherAmount) ? e.mustPay : charge.otherAmount, 
+            charge.broadAccountAmount = judgeEmpty(charge.broadAccountAmount) ? e.mustPay : charge.broadAccountAmount) : (charge.otherAmount = "", 
+            $(".mustpaytip").css("visibility", "hidden")));
+            2 == $(".broadband input:visible").length ? (judgeEmpty($("#broadBandfix").val()) || judgeEmpty($("#fixNumInput").val())) && $(".broadband .custominfos,.broadband .customMustPay").hide() : judgeEmpty($(".broadband input:visible").val()) && $(".broadband .custominfos,.broadband .customMustPay").hide(), 
+            2 == $(".fix-num  input:visible").length && (judgeEmpty($("#fixCode").val()) || judgeEmpty($("#fixPhone").val())) && $(".fix-num .custominfos,.fix-num .customMustPay").hide();
+        }).error(function() {
+            $(".customMustPay").html("").hide();
+        });
+    }
+}, sameNumberMustPayMent = function() {
+    var e = isMobileTab() ? "mobileBanner" : isFixedTab() ? "fixBanner" : "broadBanner";
+    if ($("#broadband").hasClass("select") && 3 == $("#broadBandfix").val().length ? $(".customInfo").css("margin-left", ".1rem") : $(".customInfo").css("margin-left", ".08rem"), 
+    isMobileTab() && "mobileBanner" == e && null != mustpayFeeInfo) $(".fixed-num .customMustPay").html("").hide(), 
+    $(".broad-num .customMustPay").html("").hide(), null != leftFeeInfo && leftFeeInfo > 0 ? $(".mobile-num .customMustPay").html(" | 余额:<b class='redlabel'>" + leftFeeInfo + "元</b>").show() : ($(".mobile-num .customMustPay").html(" | 欠费:<b class='redlabel'>" + mustpayFeeInfo + "元</b>").show(), 
+    mustpayFeeInfo > 0 ? $(".mustpaytip").text("已欠费" + mustpayFeeInfo + "元").css("visibility", "visible") : (charge.otherAmount = "", 
+    $(".mustpaytip").css("visibility", "hidden"))); else {
+        if (!isFixedTab() || "fixBanner" != e || null == fixmustpayFeeInfo) return $(".mobile-num .customMustPay").html("").hide(), 
+        $(".fixed-num .customMustPay").html("").hide(), judgeEmpty($("#fixNumInput").val()) || $(".broad-num .customMustPay").html("欠费:<b class='redlabel'>" + broadmustpayFeeInfo + "元</b>").show(), 
+        void (broadmustpayFeeInfo > 0 ? $(".mustpaytip").text("已欠费" + broadmustpayFeeInfo + "元").css("visibility", "visible") : $(".mustpaytip").css("visibility", "hidden"));
+        $(".mobile-num .customMustPay").html("").hide(), $(".broad-num .customMustPay").html("").hide(), 
+        $(".fixed-num .customMustPay").html(" | 欠费:<b class='redlabel'>" + fixmustpayFeeInfo + "元</b>").show(), 
+        fixmustpayFeeInfo > 0 ? $(".mustpaytip").text("已欠费" + fixmustpayFeeInfo + "元").css("visibility", "visible") : $(".mustpaytip").css("visibility", "hidden");
+    }
+}, closeWapToApp = function() {
+    $(".wapToAppTipDiv").hide(), $(".thickdiv").hide(), hideWapToAppCss(), charge.tipShowCount++;
+}, downloadAppCount = function() {
+    $.ajax({
+        type: "post",
+        url: getUrl() + "mobWapBankCharge/redis_wapToAppDownload",
+        data: "",
+        dataType: "json"
+    }).success(function() {}).error(function() {});
+}, closeTip = function() {
+    $(".payTip").hide();
+}, toPay = function() {
+    window.open((ISWAP ? nginxRequstURLWap : nginxRequstURL) + "/query/index.html");
+}, selectSale = function() {
+    var e = !1, o = !1;
+    $(".inner-cashVoucher-list").each(function(t, a) {
+        var n = $(a).find("span").attr("offerateFlag");
+        "7" == n || "8" == n ? e = !0 : o = !0;
+    });
+    var t = $(this).find("span:eq(2)").attr("offerateId"), a = $(this).find("span:eq(2)").attr("offerate"), n = $(this).find("span:eq(2)").attr("offerateFlag");
+    $("#offerRateId").val(t), $("#offerRate").val(a), $("#activityType").val(n), charge.offerateId = t, 
+    charge.offerate = a, charge.offerrateFlag = n, $(this).find("em").toggleClass("select-c"), 
+    $(this).siblings().find("em").removeClass("select-c"), console.log("offerateId：" + charge.offerateId + "，offerate：" + charge.offerate + "，offerrateFlag：" + charge.offerrateFlag + "，offerate：" + charge.offerate + "，offerrateFlag：" + charge.offerrateFlag);
+};
+
+$(".otherAmout .closeIcon,.jfAmout .closeIcon").on("click", function() {
+    $(this).parents(".mask").hide();
+}), $(".confirmPay .closeIcon").on("click", function() {
+    $(".confirmPay .btmPart").animate({
+        bottom: "-100%"
+    }, "fast", function() {
+        $(".confirmPay").hide();
+    }), ModalHelper.beforeClose(), $(".amount-cur").removeClass("amount-cur");
+}), $(".discountList").on("click", function() {
+    $(".confirmPay .btmPart").animate({
+        left: "-100%"
+    }, "fast"), $("#appointCash .btmPart").animate({
+        left: "0"
+    }, "fast");
+}), $(".btmPart .goback").on("click", function() {
+    $(".confirmPay .btmPart").animate({
+        left: "0"
+    }, "fast"), $(this).parents(".btmPart").animate({
+        left: "100%"
+    }, "fast");
+}), $(".mask .go_back").on("click", function() {
+    ModalHelper.beforeClose(), $("#cashVoucherPage .btmPart").animate({
+        bottom: "-100%"
+    }, "fast", function() {
+        $("#cashVoucherPage").hide();
+    });
+}), $(".free_notify").on("click", function() {
+    $(".confirmPay .btmPart").animate({
+        left: "-100%"
+    }, "fast"), $(".activePage .btmPart").animate({
+        left: "0"
+    }, "fast");
+});
+
+var showJfCon = function() {
+    charge.isJfjf ? (points.isPointShow = !0, points.isUsePointShow = !0, inputAmount(), 
+    pointPhone4G(), $(".amount-cur").removeClass("amount-cur"), $(this).addClass("amount-cur")) : ($("#errormsg").html("积分交费仅支持4G号码登录为本机交费").show(), 
+    errormsgshow());
+};
+
+$("#cardlist").on("click", ".action-list", function() {
+    charge.isActionPayfee ? clickActionPayfee() : ($("#errormsg").html("此号码没有存费送费活动").show(), 
+    errormsgshow());
+});
+
+var clickActionPayfee = function() {
+    var e = charge.provinceCode, o = charge.cityCode, t = $("#number").val().replace(/\s/g, ""), a = !1;
+    (common.isLogin && common.loginPhoneNo == t || isFtp) && (a = !0);
+    var n = "../actionpayfee/index.html?desmobile=" + t + "&provinceCode=" + e + "&cityCode=" + o + "&isIdentical=" + a;
+    window.open(n, "_self");
+};
+
+$("#cardlist .other,.fixCardList .fixed-other,.broadCardList .amount-list-broad").on("click", function() {
+    return defaultUseJf = !1, !judgeEmpty(fixmustpayFeeInfo) && isFixedTab() && 0 != Number(fixmustpayFeeInfo) ? charge.otherAmount = fixmustpayFeeInfo : !judgeEmpty(mustpayFeeInfo) && isMobileTab() && 0 != Number(mustpayFeeInfo) ? charge.otherAmount = mustpayFeeInfo : !judgeEmpty(broadmustpayFeeInfo) && isBroadTab() && 0 != Number(broadmustpayFeeInfo) ? charge.otherAmount = broadmustpayFeeInfo : !judgeEmpty(points.userPoint) && isMobileTab() && Number(points.userPoint) > 0 && (charge.otherAmount = parseFloat(points.userPoint / 100).toFixed(2)), 
+    judgeEmpty(getChargePhone()) ? ($("#errormsg").html("请输入交费号码").show(), void errormsgshow()) : (points.isUsePointShow = !1, 
+    inputAmount(), $(".amount-cur").removeClass("amount-cur"), $(this).addClass("amount-cur"), 
+    points.isUsePointShow = !1, isSubmit = !1, void paychannel());
+}), $(".integral-list").on("click", function() {
+    return defaultUseJf = !0, $(".integral-list").hasClass("gray-amount-list") ? ($("#errormsg").html("积分交费仅支持4G号码登录为本机交费").show(), 
+    void errormsgshow()) : (!judgeEmpty(mustpayFeeInfo) && isMobileTab() && 0 != Number(mustpayFeeInfo) ? charge.otherAmount = mustpayFeeInfo : !judgeEmpty(points.userPoint) && isMobileTab() && Number(points.userPoint) > 0 && (charge.otherAmount = parseFloat(points.userPoint / 100).toFixed(2)), 
+    judgeEmpty(getChargePhone()) ? ($("#errormsg").html("请输入交费号码").show(), void errormsgshow()) : (points.isUsePointShow = !1, 
+    inputAmount(), $(".amount-cur").removeClass("amount-cur"), $(this).addClass("amount-cur"), 
+    points.isUsePointShow = !1, isSubmit = !1, void paychannel()));
+}), $(".jfpayBtn").click(function() {
+    points.isUsePointShow = !0, isSubmit = !1, paychannel();
+}), $(".mui-switch").on("change", function() {
+    isUseJf();
+}), $(".jfList .jfIpt").keyup(function() {
+    checkAndConsumePoint(!0);
+});
+
+var showSubmitPointList = function() {
+    var e = Number($(".jfList .jfIpt").val());
+    !judgeEmpty(e) && e > 0 ? ($(".jf-all").hide(), $(".jf-left").show()) : ($(".jf-left").hide(), 
+    $(".jf-all").show());
+};
+
+$("#scrollTipsContent").on("click", ".swiper-slide", function() {
+    window.location.hash = $(this).hasClass("slideInvoice") ? "invoice-tips" : $(this).hasClass("slideVip") ? "vip-tips" : "warm-tips";
+});
+
+var setOfferRate = function(e, o, t) {
+    charge.offerrateFlag = judgeEmpty(e) ? "" : 1 == e.length ? "0" + e : e, charge.offerate = o, 
+    charge.offerateId = t;
+}, computedHei = function() {
+    var e = $(window).height() - $(".fixedBut").height(), o = $("#body-class-random").height();
+    e > o ? $(".fixedBut").addClass("fixedPart") : ($(".fixedBut").removeClass("fixedPart"), 
+    $(".fixedBut").show());
+}, maskFocusHeight = function() {
+    var e = navigator.userAgent.toLowerCase();
+    /iphone|ipad|ipod/.test(e) ? ($(".otherAmout").css("height", "auto"), $(".jfAmout").css("height", "auto")) : ($(".otherAmout").css("height", "200%"), 
+    $(".jfAmout").css("height", "200%"));
+};
+
+$(".wotip").on("click", function() {
+    if ($(this).hasClass("select")) $(this).removeClass("select"); else {
+        if ($(this).addClass("select"), $("#broadband ").hasClass("select") && $("#broadBandPackYear").hasClass("cur")) return;
+        $("#errormsg").html("请选择或输入交费金额").show(), errormsgshow();
+    }
+}), $("#otherAmount").on("blur", function() {
+    setTimeout(function() {
+        var e = document.documentElement.scrollTop || document.body.scrollTop || 0;
+        window.scrollTo(0, Math.max(e - 1, 0));
+    }, 100);
+});function shortListH() {
+    var e = $(window).height() / 2 + 1.1 * ($(window).width() / 750) * 100, a = e - 2.1 * ($(window).width() / 750) * 100;
+    $(".confirmPay .ulMinH").css("height", a + "px"), $(".btmPart").css("height", e + "px"), 
+    $(".activeInfor #tipsDiv").css("height", a + "px");
+}
+
+function hasJfList() {
+    $(".mui-switch").prop("checked", !0), isUseJf();
+}
+
+function noJfList() {
+    $(".btmPart").css("height", "8.6rem"), $(".activeInfor #tipsDiv").css("height", "7rem"), 
+    $(".confirmPay .ulMinH").css("height", "6.5rem");
+}
+
+var isSubmit = !1, paytypes_jf, defaultUseJf = !1, checkBroadSubmit = function() {
+    if (isBroadTab() && "inline-block" == $(".confirm-btn-broad").css("display")) {
+        if ("03" == common.netCode) return $("#errormsg").html("请输入正确的固话号码").show(), errormsgshow(), 
+        !1;
+        if ("04" == common.netCode) return judgeEmpty($(".otherBrandInput ").val()) ? ($("#errormsg").html("请输入交费金额").show(), 
+        errormsgshow(), !1) : ($("#errormsg").html("请输入正确宽带账号").show(), errormsgshow(), 
+        !1);
+        if ("08" == common.netCode) return "block" == $("#other").css("display") ? judgeEmpty($(".otherBrandInput ").val()) ? ($("#errormsg").html("请输入输入交费金额").show(), 
+        errormsgshow(), !1) : ($("#errormsg").html("请输入正确宽带编码").show(), errormsgshow(), 
+        !1) : ($("#errormsg").html("请输入正确宽带编码").show(), errormsgshow(), !1);
+    }
+    return !0;
+}, verifyInfo = function() {
+    if (isBroadTab() && (judgeEmpty(charge.broadProvCode) || judgeEmpty(charge.broadCityCode))) return $("#errormsg").html("请选择省份地市").show(), 
+    errormsgshow(), !1;
+    if (isBroadTab() && "请选择" == $("#netType").text()) return $("#errormsg").html("请选择号码类型").show(), 
+    errormsgshow(), !1;
+    if (isBroadTab() && !testFixedCode(common.netCode, getBroadBandPhone())) return $("#errormsg").html("03" == common.netCode ? "请输入正确的固话号码" : "请输入正确的宽带编码").show(), 
+    errormsgshow(), !1;
+    if (isBroadTab() && "04" == common.netCode && !testBandAccount(getBroadBandPhone())) return $("#errormsg").html("请输入正确的宽带账号/编码").show(), 
+    errormsgshow(), !1;
+    if (isFixedTab() && !common.fixedRex.test(charge.fixCode + charge.fixNum)) return $("#errormsg").html("请输入正确的固话号码").show(), 
+    errormsgshow(), !1;
+    if (isFixedTab() && !/^((0)+\d{2,3})$/.test(charge.fixCode)) return $("#errormsg").html("请输入正确的区号").show(), 
+    errormsgshow(), !1;
+    if (isFixedTab() && !/^\d{7,8}$/.test(charge.fixNum)) return $("#errormsg").html("请输入正确的固话号码").show(), 
+    errormsgshow(), !1;
+    if (isMobileTab() && !common.phoneRex.test(formateNumGetBasicPhone($("#number").val()))) return $("#errormsg").html("请正确填写号码").show(), 
+    errormsgshow(), !1;
+    if (isBroadTab() && "" != charge.broadProvCode && void 0 != charge.broadProvCode && "与宽带绑定的固话" == $("#netType").text()) {
+        var e = getAreaCode(charge.broadProvCode, charge.broadCityCode);
+        if ("与宽带绑定的固话" == $("#netType").text() && e != $("#broadBandfix").val()) return $("#errormsg").html("输入的号码与选择的省份不匹配").show(), 
+        errormsgshow(), !1;
+        if (e != charge.fixCode) return $("#errormsg").html("输入的号码与选择的省份不匹配").show(), errormsgshow(), 
+        !1;
+    }
+    return !0;
+}, verifyMustpayInfo = function() {
+    if (isBroadTab() && !testFixedCode(common.netCode, getBroadBandPhone())) return !1;
+    if (isBroadTab() && "04" == common.netCode && !testBandAccount(getBroadBandPhone())) return !1;
+    if (isFixedTab() && !/^(010|02[0-9]|0[3-9][0-9]{2})\-?([2-9][0-9]{6,7})$/.test(charge.fixCode + charge.fixNum)) return !1;
+    if (isFixedTab() && !/^((0)+\d{2,3})$/.test(charge.fixCode)) return !1;
+    if (isFixedTab() && !/^\d{7,8}$/.test(charge.fixNum)) return !1;
+    if (isMobileTab() && !common.phoneRex.test(formateNumGetBasicPhone($("#number").val()))) return !1;
+    if (isBroadTab() && "" != charge.broadProvCode && void 0 != charge.broadProvCode && ("与宽带绑定的固话" == $("#netType").text() || "宽带编码" == $("#netType").text())) {
+        var e = getAreaCode(charge.broadProvCode, charge.broadCityCode);
+        if (e != charge.fixCode) return !1;
+    }
+    return !isMobileTab() || "" != $("#number").val() && $("#number").val().replace(/\s/g, "") != $("#hiddenNumber").val() ? isFixedTab() && (judgeEmpty($("#fixPhone").val()) || $("#fixPhone").val().replace(/\s/g, "") == $("#hiddenNumber").val()) ? !1 : !0 : !1;
+}, getPayChannelParam = function() {
+    return {
+        "commonBean.phoneNo": getChargePhone(),
+        "commonBean.areaCode": isFixedTab() || isBroadTab() ? charge.fixCode : "",
+        "commonBean.provinceCode": isFixedTab() ? charge.fixProvinceCode : isMobileTab() || isFtp ? charge.provinceCode : charge.broadProvCode,
+        "commonBean.cityCode": isFixedTab() ? charge.fixCityCode : isMobileTab() || isFtp ? charge.cityCode : charge.broadCityCode,
+        bussineTypeInput: isFixedTab() ? "1" : isBroadTab() ? "2" : "0",
+        "commonBean.payAmount": getPayAmount(),
+        numberType: isBroadTab() ? common.netCode : "",
+        "commonBean.channelType": CHANNEL_TYPE,
+        channelKey: $.trim($("#channelKey").val()),
+        "commonBean.bussineType": getBussinesType(),
+        "commonBean.netAccount": isBroadTab() && "04" == common.netCode ? getBroadBandPhone() : "",
+        browserVersion: $("#browserVersion").val(),
+        ticketNew: $("#ticketNew").val()
+    };
+}, getBussinesType = function() {
+    return isMobileTab() ? charge.bankchargeamount ? BUSINESS_TYPE_MOBILE : BUSINESS_TYPE_PAYMOBILE : charge.bankchargeamount ? BUSINESS_TYPE_FIX : BUSINESS_TYPE_PAYFIX;
+}, getCheckParam = function() {
+    return {
+        "commonBean.phoneNo": getChargePhone(),
+        "commonBean.areaCode": isFixedTab() || isBroadTab() ? charge.fixCode : "",
+        "commonBean.provinceCode": isFixedTab() ? charge.fixProvinceCode : isMobileTab() || isFtp ? charge.provinceCode : charge.broadProvCode,
+        "commonBean.cityCode": isFixedTab() ? charge.fixCityCode : isMobileTab() || isFtp ? charge.cityCode : charge.broadCityCode,
+        bussineTypeInput: isFixedTab() ? "1" : isBroadTab() ? "2" : "0",
+        "commonBean.payAmount": getPayAmount(),
+        "cardBean.cardValue": charge.bankchargeamount ? cards.selectedCard : "",
+        "cardBean.cardValueCode": charge.bankchargeamount ? cards.selectedCardValueCode : "",
+        "commonBean.userChooseMode": charge.bankchargeamount ? charge.isOtherAmount ? "1" : "0" : "",
+        "invoiceBean.is_mailing": "0",
+        "invoiceBean.need_invoice": "0",
+        "invoiceBean.invoice_type": "",
+        "invoiceBean.id_cardno": "",
+        "invoiceBean.invoice_head": "",
+        "invoiceBean.card_type": "",
+        "commonBean.reserved1": isGDActivity() + "",
+        numberType: isBroadTab() ? common.netCode : "",
+        "commonBean.channelType": CHANNEL_TYPE,
+        channelKey: $.trim($("#channelKey").val()),
+        "commonBean.bussineType": getBussinesType(),
+        "commonBean.netAccount": isBroadTab() && "04" == common.netCode ? getBroadBandPhone() : "",
+        "pointBean.payMethod": getpaymethod(),
+        "pointBean.pointNumber": getChargePoint(),
+        browserVersion: $("#browserVersion").val(),
+        "commonBean.activityType": charge.bankchargeamount ? charge.offerrateFlag : "",
+        "commonBean.offerate": charge.bankchargeamount ? charge.offerate : "",
+        "commonBean.offerateId": charge.bankchargeamount ? charge.offerateId : "",
+        "commonBean.orgCode": charge.orgCode,
+        "commonBean.channelCode": charge.channelCode,
+        "commonBean.ticketNo": charge.ticketNo,
+        "commonBean.reserved2": GetRequestLikeUrl("callbackUrl"),
+        ticketNew: $("#ticketNew").val()
+    };
+}, getBroadBandPackYearParam = function() {
+    return {
+        numberType: broadband.netCode,
+        "commonBean.channelType": ISWAP ? "307" : "308",
+        "commonBean.areaCode": broadband.areaCode,
+        "commonBean.phoneNo": broadband.bdNumber,
+        "commonBean.payAmount": 100 * broadband.bdProductPrice,
+        "commonBean.netAccount": broadband.bdNumber,
+        "commonBean.provinceCode": broadband.broadProvCode,
+        "commonBean.cityCode": broadband.broadCityCode,
+        "commonBean.broadBandBalancePayFee": broadband.isPayByBalance,
+        selDiscntCode: broadband.selDiscntCode,
+        selProductID: broadband.selProductID,
+        selIsChange: broadband.IsChange,
+        "secstate.state": broadband.secstate,
+        channelKey: $.trim($("#channelKey").val())
+    };
+}, getChargePhone = function() {
+    return isMobileTab() ? formateNumGetBasicPhone($("#number").val()) : isFixedTab() ? charge.fixNum : isBroadTab() ? "04" == common.netCode || "08" == common.netCode || "10" == common.netCode ? getBroadBandPhone() : charge.fixNum : void 0;
+}, getPayAmount = function() {
+    return isPackYear ? broadband.bdProductPrice : charge.bankchargeamount ? cards.selectedOfferPrice : "04" != common.netCode ? charge.otherAmount : charge.broadAccountAmount;
+}, getpaymethod = function() {
+    var e = $(".jfList .jfIpt").val();
+    return judgeEmpty($.trim(e)) || charge.bankchargeamount ? "" : accMul(Number(charge.otherAmount), 100) - Number($.trim(e)) == 0 ? "1" : "0";
+}, getChargePoint = function() {
+    return judgeEmpty($.trim($(".jfList .jfIpt").val())) || charge.bankchargeamount ? "" : $.trim($(".jfList .jfIpt").val());
+}, broadbandYearCheck = function() {
+    var e = "broadbandPackYear/packYearCheck", a = getBroadBandPackYearParam();
+    a["commonBean.orgCode"] = charge.orgCode, a["commonBean.channelCode"] = charge.channelCode, 
+    $(".checkAmount").show(), $.ajax({
+        type: "post",
+        data: a,
+        dataType: "json",
+        url: serviceBankchargeURL + (ISWAP ? e : e)
+    }).success(function(e) {
+        return judgeEmpty(e) || "success" != e.out ? ($(".checkAmount").hide(), broadband.secstate = e.secstate, 
+        $("#broadbandpaystate").val(broadband.secstate), $("#errormsg").html(e.out), void errormsgshow()) : ($(".checkAmount").hide(), 
+        null != e.secstate && (broadband.secstate = e.secstate), judgeEmpty(broadband.secstate) ? ($("#errormsg").html("系统异常,请稍后再试！"), 
+        void errormsgshow()) : ($("#broadbandpaystate").val(broadband.secstate), void paysubmit()));
+    }).error(function(e) {
+        return $(".checkAmount").hide(), 0 == e.responseText.indexOf("limited") ? ($("#errormsg").html("系统繁忙,请稍后再试！"), 
+        void errormsgshow()) : ($("#errormsg").html("系统繁忙,请重试！"), void errormsgshow());
+    });
+}, paychannel = function() {
+    if (checkBroadSubmit()) {
+        var e = paychanneluri[getUriIndex()];
+        if (isPackYear) {
+            if ("none" == $(".User_information").css("display")) return void errormsgshow();
+            if (!validateParameters()) return;
+            if (broadband.isPayByBalance) return void paycheck(!1);
+            e = "broadbandPackYear/packYearPayChannel.action";
+        } else if (!verifyInfo() || charge.bankchargeamount && !charge.getOfferate) return;
+        if (ISWAP && isMobileTab() && judgeEmpty($("#channelKey").val()) && judgeEmpty($("#browserVersion").val()) && 0 == charge.tipShowCount) return void showWapToAppCss();
+        if (isMobileTab() && "bankunify" == $("#channelKey").val() && judgeEmpty($("#browserVersion").val()) && 0 == charge.tipShowCount) return void showWapToAppCss();
+        $(".loadingdiv").show();
+        var a = isPackYear ? getBroadBandPackYearParam() : getPayChannelParam();
+        a["secstate.state"] = "", $.ajax({
+            type: "post",
+            url: getUrl() + e,
+            data: a,
+            dataType: "json"
+        }).success(function(e) {
+            return isSubmit = !1, $(".loadingdiv").hide(), void 0 == e.out ? ($("#errormsg").html("交费系统繁忙，请稍候再试！").show(), 
+            void errormsgshow()) : void ("login" != judeLogin(e.out, ISWAP) && ("success" == e.out ? ($(".hiddenPhone").val(a["commonBean.phoneNo"]), 
+            $(".hiddenProvince").val(a["commonBean.provinceCode"]), dealSubmit(e)) : ($(".loadingdiv").hide(), 
+            $("#errormsg").html(e.out).show(), errormsgshow())));
+        }).error(function() {
+            $(".loadingdiv").hide(), $("#errormsg").html("尊敬的用户您好，交费系统繁忙，请稍后再试。").show(), errormsgshow();
+        });
+    }
+}, paycheck = function(e) {
+    if (!isSubmit && checkBroadSubmit()) {
+        if (!charge.bankchargeamount && $(".mui-switch").prop("checked") && judgeEmpty($(".jfList .jfIpt").val())) return $("#errormsg").html("请输入正确的积分").show(), 
+        void errormsgshow();
+        if ((!charge.isJfjf || 0 != $(".payFeeMoney b").text()) && e && judgeEmpty(charge.orgCode)) return $("#errormsg").html("请选择支付方式").show(), 
+        void errormsgshow();
+        if (isPackYear) {
+            if (!validateParameters()) return;
+            return void broadbandYearCheck();
+        }
+        if (!verifyInfo() || charge.bankchargeamount && !charge.getOfferate) return void $(window).scrollTop(0);
+        if (charge.verifyCodeNew) {
+            capDestroy(), $("#body-class-random").removeClass("body-class").addClass("body-class-random"), 
+            $(".thickdiv").show(), document.body.style.overflow = "hidden", document.body.style.overflowY = "hidden";
+            var a = {
+                callback: cbfn,
+                themeColor: "FF8C00",
+                type: "popup"
+            };
+            return void capInit(document.getElementById("TCaptcha"), a);
+        }
+        paycheckAfterVerify();
+    }
+}, paycheckAfterVerify = function() {
+    if (hideWapToAppCss(), !verifyInfo() || charge.bankchargeamount && !charge.getOfferate) return void $(window).scrollTop(0);
+    $(".loadingdiv").show();
+    var e = getCheckParam();
+    isSubmit = !0, $.ajax({
+        type: "post",
+        url: getUrl() + checkuri[getUriIndex()],
+        data: e,
+        dataType: "json"
+    }).success(function(a) {
+        return isSubmit = !1, $(".loadingdiv").hide(), void 0 == a.out ? ($("#errormsg").html("交费系统繁忙，请稍候再试！").show(), 
+        void errormsgshow()) : void ("login" != judeLogin(a.out, ISWAP) && ("success" == a.out ? ($("#paystate").val(a.secstate), 
+        $(".hiddenPhone").val(e["commonBean.phoneNo"]), $(".hiddenProvince").val(e["commonBean.provinceCode"]), 
+        paysubmit()) : ($(".loadingdiv").hide(), $("#errormsg").html(a.out).show(), errormsgshow())));
+    }).error(function() {
+        isSubmit = !1, $(".loadingdiv").hide(), $("#errormsg").html("尊敬的用户您好，交费系统繁忙，请稍后再试。").show(), 
+        errormsgshow();
+    });
+}, tipToPay = function() {
+    hideWapToAppCss(), $(".wapToAppTipDiv").hide();
+    var e = paychanneluri[getUriIndex()];
+    isPackYear && (e = "broadbandPackYear/packYearPayChannel.action"), $(".loadingdiv").show();
+    var a = isPackYear ? getBroadBandPackYearParam() : getPayChannelParam();
+    a["secstate.state"] = "", $.ajax({
+        type: "post",
+        url: getUrl() + e,
+        data: a,
+        dataType: "json"
+    }).success(function(e) {
+        return isSubmit = !1, $(".loadingdiv").hide(), void 0 == e.out ? ($("#errormsg").html("交费系统繁忙，请稍候再试！").show(), 
+        void errormsgshow()) : void ("login" != judeLogin(e.out, ISWAP) && ("success" == e.out ? ($(".hiddenPhone").val(a["commonBean.phoneNo"]), 
+        $(".hiddenProvince").val(a["commonBean.provinceCode"]), dealSubmit(e)) : ($("#errormsg").html(e.out).show(), 
+        errormsgshow())));
+    }).error(function() {
+        $(".loadingdiv").hide(), $("#errormsg").html("尊敬的用户您好，交费系统繁忙，请稍后再试。").show(), errormsgshow();
+    });
+}, dealSubmit = function(e) {
+    var a = e.payTypes;
+    paytypes_jf = e.payTypes;
+    var o = (e.isDirectPay || "true" == e.isDirectPay) && (judgeJsonEmpty(a) || a.length <= 1);
+    if (judgeJsonEmpty(a) || 1 != a.length || setDefaultPayChannel(a), isPackYear) {
+        if (broadband.isPayByBalance || 0 == parseInt(broadband.bdProductPrice) || o) return void paycheck();
+        showPackYearSubmitPage(a);
+    } else if (charge.bankchargeamount) {
+        if (o && judgeEmpty(cards.couldChoosenOfferRate)) return void paycheck();
+        showBankchargeSubmitPage(a);
+    } else charge.isOtherAmount && showBankpaySubmitPage(a);
+}, showPackYearSubmitPage = function(e) {
+    $(".confirmPay li").hide(), showSubmitPageNormalInfo(), $(".confirmPay").show(), 
+    showPayList(e);
+}, showBankchargeSubmitPage = function(e) {
+    noJfList(), $(".confirmPay li").hide(), showSubmitPageNormalInfo(), showDisCountList(), 
+    $(".total b").text(cards.selectedCard / 100), $(".payFeeMoney b").text(cards.selectedOfferPrice), 
+    $(".confirmPay").show(), $(".jf-all").show(), showPayList(e);
+}, showDisCountList = function() {
+    var e = createCardCashVoucherPage();
+    if (!judgeEmpty(e)) {
+        $("#appointCash .cashVoucher-lists").html(e);
+        var a = judgeEmpty(charge.offerateId) ? "未使用折扣" : calOfferMoney(cards.selectedCard, cards.selectedOfferPrice) + getOfferRateName(charge.offerrateFlag, charge.offerate);
+        $(".discountList span").html(a), $(".confirmPay .discountList").show();
+    }
+}, showBankpaySubmitPage = function(e) {
+    shortListH(), $(".confirmPay li").hide(), showSubmitPageNormalInfo(), $(".orderInfor").hide(), 
+    $(".otherAmout").show(), charge.isJfjf && Number(points.userPoint) > 0 ? (points.isUsePointShow && ($(".confirmPay .jfIpt").val($(".pointsInput").val()), 
+    checkAndConsumePoint(!0)), showSubmitPointList(), $(".confirmPay .jfList").show(), 
+    defaultUseJf ? hasJfList() : ($(".mui-switch").prop("checked", !1), isUseJf())) : charge.otherAmount > 0 ? $(".payFeeMoney b").text(charge.otherAmount) : $(".otherAmout .tip-err").removeClass("unvisible"), 
+    $(".total b").text(charge.otherAmount), $(".confirmPay").show(), showPayList(e);
+}, showSubmitPageNormalInfo = function() {
+    ModalHelper.afterOpen();
+    var e = getChargePhone();
+    isFixedTab() && (e = charge.fixCode + "-" + charge.fixNum), isBroadTab() && (e = getBroadBandPhone()), 
+    $(".orderInfor .number").text(e), $(".orderInfor .total b").html(getPayAmount()), 
+    $(".confirmPay .orderInfor,.confirmPay .payType,.confirmPay .payMoney").show(), 
+    showActiveInfo(), $(".mask").hide(), $(".confirmPay .btmPart").animate({
+        bottom: "0"
+    }, "fast");
+}, showActiveInfo = function() {
+    if ($(".free_notify").attr("free", "").hide(), 0 == activityList.length || charge.bankchargeamount) {
+        var e = getSelectedCardInfo();
+        judgeEmpty(e) || judgeEmpty(e.activity_type) || charge.isOtherAmount || points.isPointShow || "7" == e.activity_type ? $(".free_notify").attr("free", "free").hide() : ($("#desDiv").val(delPayActivityDes(e.activity_type, e.gift_amount, e.activity_tips, e.trafficGetUrl)), 
+        checkActivetype(e.activity_type, e.gift_amount), $(".free_notify").attr("free", "free").show());
+    } else {
+        var a = getBussinesType();
+        for (var o in activityList) if (!judgeEmpty(activityList[o].activityAmountLimit)) {
+            var r = activityList[o].activityAmountLimit.split(","), t = activityList[o].supportServiceType.split(","), n = r[0], i = r[1];
+            if (charge.otherAmount >= n / 100 && charge.otherAmount < i / 100 && activityInBussinesType(t, a) && "7" != activityList[o].activitytype) {
+                delPayActivityDes(activityList[o].activitytype, activityList[o].giftAmount, activityList[o].activityTips, activityList[o].trafficGetUrl), 
+                checkActivetype(activityList[o].activitytype, activityList[o].giftAmount), $(".free_notify").attr("free", "free").show();
+                break;
+            }
+            $(".free_notify").attr("free", "free").hide();
+        }
+    }
+}, activityInBussinesType = function(e, a) {
+    for (var o in e) if (e[o] == a) return !0;
+    return !1;
+}, checkActivetype = function(e, a) {
+    judgeEmpty($("#desDiv").html()) ? $(".activeTitle").hide() : $(".activeTitle").show(), 
+    1 == e ? $(".activeTypeName").html("充值送话费") : 2 == e ? $(".activeTypeName").html("充值送流量") : 3 == e ? $(".activeTypeName").html("充值送腾讯视频VIP会员") : 4 == e ? $(".activeTypeName").html("充值送电子券") : 0 == e ? $(".activeTypeName").html("充值送红包") : 5 == e ? $(".activeTypeName").html("送 " + a + " 元 话费 ") : 6 == e ? $(".activeTypeName").html("送京东返利红包") : 8 == e && $(".activeTypeName").html("充值领元宵节礼品");
+}, setDefaultPayChannel = function(e) {
+    var a = e[0];
+    charge.orgCode = a.payproviderId, charge.channelCode = a.paychannelCode;
+}, showPayList = function(e) {
+    charge.orgCode = "", charge.channelCode = "";
+    var a = $(".payFeeMoney b").text();
+    if (judgeJsonEmpty(e) || judgeEmpty(e)) return void $(".payTypeLists").html("");
+    var o = "", r = null, t = 0;
+    $.each(e, function(e, a) {
+        if (a.activity) {
+            var n = {};
+            t++, n.activeli_index = a.activity ? e : null, n.activeli_paytype = a.activity ? a : null, 
+            n.activeClass = a.activity ? "hasActive" : "", n.paytypeActCon = a.activity ? '<div class="activecon">' + a.activityDesc + "</div>" : "", 
+            o += '<div orgCode="' + a.payproviderId + '" class="' + n.activeClass + '" channelCode="' + a.paychannelCode + '" onclick="choosePayType.call(this)"> <div class="type"><div class="mainCon"><img src="' + (staticsrc + a.picUrl + "?version=" + cversion) + '"><p>' + a.channelName + "</p></div>" + n.paytypeActCon + "</div></div>", 
+            r = a.hasRecord ? e : r;
+        } else t++, o += '<div orgCode="' + a.payproviderId + '" class="" channelCode="' + a.paychannelCode + '" onclick="choosePayType.call(this)"> <div class="type"><img src="' + (staticsrc + a.picUrl + "?version=" + cversion) + '"><p>' + a.channelName + "</p></div></div>", 
+        r = a.hasRecord ? e : r;
+    }), $(".payTypeLists").html(o), charge.isJfjf && 0 == a && Number(points.userPoint) > 0 ? $(".payTypeLists").hide() : $(".payTypeLists").show(), 
+    $(".wotip").hasClass("select") ? $("div[channelcode=WOYFWAP01] .type").parent().eq(0).click() : null != r && $(".payTypeLists>div:eq(" + r + ")").click();
+}, choosePayType = function() {
+    $(".type").removeClass("selected"), $(this).find(".type").addClass("selected"), 
+    charge.orgCode = $(this).attr("orgCode"), charge.channelCode = $(this).attr("channelCode");
+}, paysubmit = function() {
+    return "0" == $(".jfIpt").val() && judgeEmpty($("#channelKey").val()) ? (isSubmit = !1, 
+    $("#errormsg").html("请正确输入积分数量").show(), void errormsgshow()) : ($(".loadingdiv").show(), 
+    isPackYear ? void (broadband.isPayByBalance || 0 == parseInt(broadband.bdProductPrice) ? $("#broadbandForm").attr("action", serviceBankchargeURL + "broadbandPackYear/packYearBalanceSubmit").submit() : $("#broadbandForm").attr("action", serviceBankchargeURL + "broadbandPackYear/packYearSubmit").submit()) : void (charge.isCouponAllAmount && !ISWAP ? $("#bankchargeForm").attr("action", getUrl() + "mobAppBankCharge/bankChargePayZeroSubmit.action").submit() : "1" == checkIsFullPoint(getPayAmount(), $.trim($(".jfList .jfIpt").val())) ? $("#bankchargeForm").attr("action", getUrl() + submituri[getApplyUriIndex()]).submit() : goUnipay()));
+}, goUnipay = function() {
+    var e = {
+        "secstate.state": $("#paystate").val(),
+        "commonBean.phoneNo": getChargePhone(),
+        "commonBean.provinceCode": isFixedTab() ? charge.fixProvinceCode : isMobileTab() || isFtp ? charge.provinceCode : charge.broadProvCode,
+        browserVersion: $("#browserVersion").val(),
+        channelKey: $.trim($("#channelKey").val()),
+        ticketNew: $("#ticketNew").val()
+    };
+    $.ajax({
+        type: "post",
+        url: getUrl() + submituri[getApplyUriIndex()],
+        data: e,
+        dataType: "json"
+    }).success(function(e) {
+        return $(".loadingdiv").hide(), void 0 == e.payUrl ? ($("#errormsg").html("交费系统繁忙，请稍候再试！").show(), 
+        void errormsgshow()) : void $("#goUnipay").attr("action", e.payUrl).submit();
+    }).error(function() {
+        $(".loadingdiv").hide(), $("#errormsg").html("尊敬的用户您好，交费系统繁忙，请稍后再试。").show(), errormsgshow();
+    });
+}, getUrl = function() {
+    var e = "";
+    return e = isFixedTab() ? charge.bankchargeamount ? fixBankchargeURL : fixPayFeeUrl : charge.bankchargeamount ? serviceBankchargeURL : servicePayFeeUrl;
+}, getUriIndex = function() {
+    return booleantoStr(isFixedTab()) + booleantoStr(isMobileTab() || isFtp) + booleantoStr(isBroadTab()) + booleantoStr(charge.bankchargeamount) + booleantoStr(ISWAP);
+}, getApplyUriIndex = function() {
+    return booleantoStr(isFixedTab()) + booleantoStr(isMobileTab() || isFtp) + booleantoStr(isBroadTab()) + booleantoStr(charge.bankchargeamount) + booleantoStr(ISWAP) + checkIsFullPoint(getPayAmount(), $.trim($(".jfList .jfIpt").val()));
+}, checkuri = {
+    "01010": "mobAppBankCharge/bankChargeCheck.action",
+    "01011": "mobWapBankCharge/wapBankChargeCheck.action",
+    "01000": "mobAppBankPay/mobAppPayFeeCheck.action",
+    "01001": "mobWapBankPay/mobWapPayFeeCheck.action",
+    "10010": "mobAppBankCharge/fbankChargeCheck.action",
+    "10011": "mobWapBankCharge/fWapBankChargeCheck.action",
+    "10000": "mobAppBankPay/fixAppPayFeeCheck.action",
+    "10001": "mobWapBankPay/fixWapPayFeeCheck.action",
+    "00100": "mobAppBankPay/broadAppPayFeeCheck.action",
+    "00101": "mobWapBankPay/broadWapPayFeeCheck.action",
+    "00110": "mobAppBankPay/broadAppPayFeeCheck.action",
+    "00111": "mobWapBankPay/broadWapPayFeeCheck.action"
+}, submituri = {
+    "010100": "mobAppBankCharge/bankChargeSubmit.action",
+    "010110": "mobWapBankCharge/wapBankChargeSubmit.action",
+    "010000": "mobAppBankPay/mobAppPayFeeApply.action",
+    "010010": "mobWapBankPay/mobWapPayFeeApply.action",
+    "010001": "mobAppBankPay/mobAppPointPay.action",
+    "010011": "mobWapBankPay/mobWapPointPay.action",
+    "100100": "mobAppBankCharge/fbankChargeSubmit.action",
+    "100110": "mobWapBankCharge/fWapBankChargeSubmit.action",
+    "100000": "mobAppBankPay/fixAppPayFeeApply.action",
+    "100010": "mobWapBankPay/fixWapPayFeeApply.action",
+    "100001": "mobAppBankPay/fixAppPointPay.action",
+    "100011": "mobWapBankPay/fixWapPointPay.action",
+    "001000": "mobAppBankPay/broadAppPayFeeApply.action",
+    "001010": "mobWapBankPay/broadWapPayFeeApply.action",
+    "001100": "mobAppBankPay/broadAppPayFeeApply.action",
+    "001110": "mobWapBankPay/broadWapPayFeeApply.action",
+    "001001": "mobAppBankPay/broadAppPointPay.action",
+    "001011": "mobWapBankPay/broadWapPointPay.action"
+}, paychanneluri = {
+    "01010": "mobAppBankCharge/bankChargePayChannel.action",
+    "01011": "mobWapBankCharge/bankChargePayChannel.action",
+    "01000": "mobAppBankPay/mobPayFeePayChannel.action",
+    "01001": "mobWapBankPay/mobPayFeePayChannel.action",
+    "10010": "mobAppBankCharge/fbankChargePayChannel.action",
+    "10011": "mobWapBankCharge/fbankChargePayChannel.action",
+    "10000": "mobAppBankPay/fixPayFeePayChannel.action",
+    "10001": "mobWapBankPay/fixPayFeePayChannel.action",
+    "00100": "mobAppBankPay/broadPayFeePayChannel.action",
+    "00101": "mobWapBankPay/broadPayFeePayChannel.action",
+    "00110": "mobAppBankPay/broadPayFeePayChannel.action",
+    "00111": "mobWapBankPay/broadPayFeePayChannel.action"
+};function confirmRecharge() {
+    if ($(".loadingdiv").show(), !checkIpt()) return $(".loadingdiv").hide(), !1;
+    var e = preCardPwds();
+    return judgeEmpty(e) ? ($(".loadingdiv").hide(), $("#errormsg").html("请勿重复提交卡密，您可输入新的卡密").show(), 
+    errormsgshow(), !1) : void $.ajax({
+        type: "post",
+        url: servicePayFeeUrl + (ISWAP ? "mobWapBroadBandRecharge/broadBandRecharge" : "mobAppBroadBandRecharge/broadBandRecharge"),
+        async: !0,
+        data: {
+            "commonBean.phoneNo": broadband.bdNumber,
+            "commonBean.areaCode": broadband.areaCode,
+            "commonBean.provinceCode": broadband.broadProvCode,
+            "commonBean.cityCode": broadband.broadCityCode,
+            bussineTypeInput: "2",
+            numberType: broadband.netCode,
+            "commonBean.bussineType": "05",
+            "commonBean.channelType": ISWAP ? "307" : "308",
+            "rechargeBean.cardPwd": e
+        },
+        dataType: "Json",
+        success: function(e) {
+            $(".loadingdiv").hide();
+            var r = e.resultMap, a = e.resultList;
+            if (judgeEmpty(r) && judgeEmpty(a)) $("#errormsg").html(e.out).show(), errormsgshow(); else if (firstEnter) {
+                var n = $(".ipts .ipt .rechargeIpt");
+                checkCard(n, a), firstEnter = !1;
+            } else {
+                var n = $(".ipts .ipt .rechargeIpt[readonly!='readonly']");
+                checkCard(n, a);
+            }
+        },
+        error: function() {
+            $(".loadingdiv").hide();
+        }
+    });
+}
+
+function checkCard(e, r) {
+    for (var a = r.length, n = 0, o = [], t = 0; t < r.length; t++) "0000" == r[t].bssReturnCode ? (e.eq(t).parent().find(".err").hide(), 
+    e.eq(t).parent().find(".rechargeIpt").attr("readonly", "readonly").css("color", "#ccc"), 
+    n++) : (e.eq(t).parent().find(".clearNum").show(), o.push(e.eq(t).val()));
+    if (o.length > 0) {
+        var i = "";
+        $(".confirmRechargeBox").show(), $(".rechargecount").text(a), $(".rechargesuccess").text(n), 
+        $(".rechargefail").text(o.length);
+        for (var t = 0; t < o.length; t++) i += '<p class="failPassword">' + o[t] + "</p>";
+        $(".failLists").append(i), $(".failCardPwds").show(), $(".failCharge").show(), $(".inShade").show();
+    } else $("#errormsg").html("充值成功").show(), errormsgshow(), setTimeout(function() {
+        $(".goback").click();
+    }, 1e3);
+}
+
+function closeLeft() {
+    $(".inShade").hide(), $(".confirmRechargeBox").hide(), $(".failCharge").hide(), 
+    $(".failLists").empty(), $(".goback").click();
+}
+
+function continueRight() {
+    $(".confirmRechargeBox").hide(), $(".failCharge").hide(), $(".failLists").empty(), 
+    $(".inShade").hide(), goPaypage();
+}
+
+function checkIpt() {
+    var e = !0;
+    return $(".err").is(":visible") ? e = !1 : ($(".ipts .ipt .rechargeIpt").each(function(r, a) {
+        var n = $(a).val(), o = n.length, t = n.substr(0, 2);
+        return judgeEmpty(n) ? ($("#errormsg").html("请先输入当前的空输入框").show(), errormsgshow(), 
+        e = !1) : 23 > o ? ($(a).parent(".ipt").find(".err").text("请输入19位充值卡密码").show(), 
+        e = !1) : arrayNumber.toString().indexOf(t) < 0 ? ($(a).parent(".ipt").find(".err").text("您输入的充值卡密码有误，请重新输入").show(), 
+        e = !1) : void 0;
+    }), e);
+}
+
+function preCardPwds() {
+    var e = "";
+    firstEnter ? $("input[name='cardpwd']").each(function() {
+        judgeEmpty($(this).val()) || (e += "," + $(this).val());
+    }) : $(".ipts .ipt .rechargeIpt[readonly!='readonly']").each(function() {
+        judgeEmpty($(this).val()) || (e += "," + $(this).val());
+    });
+    var r = e.replace(/[ ]/g, "").length;
+    return e.replace(/[ ]/g, "").substr(1, r - 1);
+}
+
+var firstEnter = !0;
+
+$(".goback").on("click", function() {
+    $(".rechargeDiv").hide(), $(".payfeeTypeDiv").show(), $.ajaxSettings.async = !1, 
+    queryPhoneFeeInfo(), $.ajaxSettings.async = !0;
+});
