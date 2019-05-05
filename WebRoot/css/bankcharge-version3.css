@@ -2075,9 +2075,9 @@ input.ng-dirty.ng-invalid.ng-invalid-required {
 	position: absolute;
 	background: #fff;
 	opacity: 0;
-	filter: alpha(opacity =                         
+	filter: alpha(opacity =                          
 		                                                         
-		                           0);
+		                            0);
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
 	border-radius: 50%;
@@ -2091,9 +2091,9 @@ input.ng-dirty.ng-invalid.ng-invalid-required {
 	position: absolute;
 	background: #fff;
 	opacity: 0;
-	filter: alpha(opacity =                         
+	filter: alpha(opacity =                          
 		                                                         
-		                           0);
+		                            0);
 	-moz-border-radius: 24px;
 	-webkit-border-radius: 24px;
 	border-radius: 24px;
@@ -2107,9 +2107,9 @@ input.ng-dirty.ng-invalid.ng-invalid-required {
 	position: absolute;
 	background: #fff;
 	opacity: 0;
-	filter: alpha(opacity =                         
+	filter: alpha(opacity =                          
 		                                                         
-		                           0);
+		                            0);
 	-moz-border-radius: 24px;
 	-webkit-border-radius: 24px;
 	border-radius: 24px;
@@ -2670,11 +2670,12 @@ input.ng-dirty.ng-invalid.ng-invalid-required {
 .userAccountInfo {
 	height: .8rem;
 	width: 75%;
-	font-size: .1em;
+	font-size: 7px;
+	-webkit-text-size-adjust: none;
 	color: #c31818;
 	position: absolute;
 	text-align: right;
-	padding-right: 10px;
+	padding-right: 0px;
 	left: 0
 }
 
@@ -4447,20 +4448,20 @@ input[disabled]::-webkit-input-placeholder {
 }
 
 .fixBottom {
-	width: 100%;
+	width: 105%;
 	padding: 0 20%;
 	margin: auto;
 	height: 0.4rem;
 	line-height: .4rem;
-	padding: .5rem 0;
+	padding: 0rem 0;
 }
 
 .fixBottom a {
 	float: left;
 	width: 20%;
-	margin: 0 auto;
+	margin: 0 auto 6px;
 	text-align: center;
-	color: #999;
+	color: #0c0c0c;
 	position: relative;
 }
 
@@ -5355,6 +5356,7 @@ input[disabled]::-webkit-input-placeholder {
 	bottom: 0;
 	left: 0;
 	box-sizing: border-box;
+	border-top: 1px solid #f6f6f6;
 }
 
 .fixedPart {
@@ -5693,16 +5695,17 @@ body.modal-open {
 }
 
 .shortselect {
-	margin: 7px auto;
+	margin: 6px auto;
 	background: transparent;
 	height: .5rem;
 	width: 1.4rem;
-	line-height: 28px;
+	font-size: .1em; line-height : 28px;
 	border: 1px solid #da1313;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	border-radius: 2px;
 	background: transparent;
+	line-height: 28px;
 }
 
 .chargesDetails {
@@ -5752,7 +5755,7 @@ body.modal-open {
 
 .copyrightInfo {
 	display: block;
-	width: 5.1rem;
+	width: 7rem;
 	height: 1.0rem;
 	line-height: .35rem;
 	text-align: center;
@@ -5760,6 +5763,6 @@ body.modal-open {
 	font-size: .1em;
 	letter-spacing: 0px;
 	text-indent: 10px;
-	margin: 1rem .36rem auto 1.3rem;
+	margin: 1rem .36rem auto 0.1rem;
 	font-family: 'Microsoft Yahei';
 }

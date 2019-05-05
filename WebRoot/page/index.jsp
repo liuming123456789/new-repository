@@ -50,9 +50,9 @@
 					<div>
 						<b>海外手机话费支付平台</b>
 						<div class="userAccountInfo">
-							用戶 ：12345
+							用戶 ：1234511
 							</br>
-							余額 ：15.52元
+							余額 ：15.5211元
 						</div>
 					</div>
 
@@ -75,7 +75,7 @@
 				<div class="swiper-wrapper Carousel">
 					<div class="swiper-slide"
 						onclick="appHref('http://u.10010.cn/qAa4x','1805281707468663','98953149458790200002')">
-						<img src="<c:out value="${cp}"/>/images/activity2018052817070.jpg">
+						<img src="<c:out value="${cp}"/>/images/carousel.png">
 					</div>
 				</div>
 				<div class="swiper-pagination"></div>
@@ -143,10 +143,6 @@
 							<input maxlength="18" class="num-ipt" name="phoneNum" id="number"
 								placeholder="请输入手机号码" onfocus="inputPhone();"
 								onkeyup="phoneNumSpace();" type="tel">
-							<div class="customInfo" onclick="inputFocus.call(this);">
-								<label class="custominfos"></label>
-								<label class="customMustPay"></label>
-							</div>
 						</dd>
 					</dl>
 					</section>
@@ -393,8 +389,7 @@ href="javascript:void(0)"
 				<section class="border-1px num-box mobile-num phone-num mob-num">
 				<div class="twoActives borAndpad">
 					<div class="appDiscounts" style="background: #3196a2;">
-						<a class="appDisCon" href="javascript:toAPP()"> <em class=""></em>
-							<span class="appIcon"></span>
+						<a class="appDisCon"> <em class=""></em> <span class="appIcon"></span>
 							<p>
 								确认购买
 							</p> <em></em> </a>
@@ -430,23 +425,20 @@ href="javascript:void(0)"
 			<!--底部-->
 			<div class="fixBottom">
 				<a href="#invoice-tips" class="goInvoice"><img
-						src="<c:out value="${cp}"/>/images/tradingtips.png" alt="充值">
+						src="<c:out value="${cp}"/>/images/recharge.png" alt="充值"></br><span>充值</span>
 				</a>
 				<a href="#warm-tips" class="goWarmTips"><img
-						src="<c:out value="${cp}"/>/images/tradingtips.png" alt="充值记录">
-					<span></span> </a>
-				<a class="chargeInfo" onclick=checkMyOrder();> <img
-						src="<c:out value="${cp}"/>/images/tradingtips.png" alt="卡密查询">
-					<span onclick=toPay();;
-					style="display: none; line-height: 0.32rem;"></span> </a>
-				<a class="chargeInfo" onclick=checkMyOrder();><img
-						src="<c:out value="${cp}"/>/images/tradingtips.png" alt="等待加入">
-					<span onclick=toPay();;
-					style="display: none; line-height: 0.32rem;"></span> </a>
-				<a class="chargeInfo" onclick=checkMyOrder();><img
-						src="<c:out value="${cp}"/>/images/tradingtips.png" alt="我的"> <span
-					onclick=toPay();; style="display: none; line-height: 0.32rem;"></span>
-				</a>
+						src="<c:out value="${cp}"/>/images/rechargeRecord.png" alt="充值记录">
+					</br><span>充值记录</span> </a>
+				<a class="goWarmTips" href="#warm-tips"> <img
+						src="<c:out value="${cp}"/>/images/cardQuery.png" alt="卡密查询">
+					</br><span>卡密查询</span> </a>
+				<a class="goWarmTips" href="#warm-tips"><img
+						src="<c:out value="${cp}"/>/images/waiting.png" alt="等待加入">
+					</br><span>等待加入</span> </a>
+				<a class="goWarmTips" href="#warm-tips"><img
+						src="<c:out value="${cp}"/>/images/mine.png" alt="我的">
+					</br><span>我的</span> </a>
 			</div>
 		</div>
 		<form id="bankchargeForm" name="bankchargeForm" method="post"
@@ -475,277 +467,6 @@ href="javascript:void(0)"
 		<form id="goUnipay" name="goUnipay" method="post" class="css-form">
 
 		</form>
-		<div class="thickdiv" style="display: none;"></div>
-		<div class="loadingdiv" style="display: none;"></div>
-
-		<div class="randomOfferRateTipDiv" style="display: none">
-			<div class="randomContentDiv">
-
-				<div class="offeRateTipContentDiv">
-
-					<label class="randomOfferateLabel">
-						恭喜您获得首单直充随机减优惠！
-						<br>
-						仅此一次，机不可失哦~
-					</label>
-
-					<div class="randomOfferateImg">
-						<img class="knownImg"
-							src="<c:out value="${cp}"/>/images/known.png">
-					</div>
-				</div>
-			</div>
-			<div class="tipCloseDiv">
-				<img src="<c:out value="${cp}"/>/images/tipClose.png"
-					class="tipCloseImg">
-			</div>
-		</div>
-		<!-- 验证码 -->
-		<form action="" id="myform" method="post" style="display: none;">
-			<input id="ticket" name="ticket" value="ticket" type="hidden">
-			<div id="TCaptcha" style="width: 300px; height: 310px;"></div>
-		</form>
-		<!--wap版下一步提示到App优惠-->
-		<div class="wapToAppTipDiv" style="display: none">
-			<div class="wapToAppContentDiv">
-				<img id="mobnext"
-					src="<c:out value="${cp}"/>/images/activity2017051219197.png"
-					alt="">
-				<div class="layerCon  appTip" style="width: 350px;">
-					<a href="javascript:closeWapToApp();" class="toAppClose"></a>
-					<a class="toApp" href="http://u.10010.cn/qAaoV"
-						onclick=downloadAppCount();; target="_blank"></a>
-					<a href="javascript:tipToPay();" class="toPay"></a>
-				</div>
-			</div>
-		</div>
-		<!--&lt;!&ndash;错误提示框&ndash;&gt;-->
-		<div class="errorTips">
-			<b class="closeIcon">x</b>
-			<span class="tips">"宽带账号"不支持充值卡充值业务</span>
-		</div>
-
-		<div class="allpopup-small">
-			<h1 id="errormsg"></h1>
-		</div>
-
-		<!--双11优惠券-->
-		<div id="cashVoucherPage" class="cashVoucherPage mask cashVoucherPart">
-			<section class="btmPart">
-			<h1>
-				<b class="icon go_back"></b> 优惠券
-			</h1>
-			<ul class="cashVoucher-lists">
-
-			</ul>
-
-			</section>
-		</div>
-		<div class="shade"></div>
-		<!--存费送费协议-->
-		<div class="agreeMentCon">
-			<h3 class="agreeTitle">
-				存费送费协议
-				<span class="closeAgree"></span>
-				<div class="close_div"></div>
-			</h3>
-			<div class="agreement_con"></div>
-		</div>
-		<!-- 身份证反查 -->
-		<div class="mask idCheck">
-			<div class="content">
-				<h2>
-					按身份证查宽带
-					<b class="closeIdCheck"></b>
-				</h2>
-				<div class="ipt cityDiv" onclick=showIdQueryProvince();>
-					<p>
-						安装地区
-					</p>
-					<input class="idqueryCity" placeholder="请选择" disabled="disabled"
-						type="text">
-					<i class="rightArrow" onclick=showIdQueryProvince();></i>
-				</div>
-				<div class="ipt idCardDiv">
-					<p>
-						身份证号
-					</p>
-					<input class="idNumber" placeholder="请输入身份证号" maxlength="18"
-						onkeyup=inputIdCard();; type="text">
-					<i class="delIdIcon"></i>
-				</div>
-				<div class="btn checkBtn gray">
-					查询
-				</div>
-			</div>
-		</div>
-		<div class="mask checkRes">
-			<div class="content">
-				<h2>
-					宽带信息
-					<b class="closeRes"></b>
-				</h2>
-				<div class="queryRes">
-					<ul class="infos">
-						<li class="info">
-							<p class="title">
-								身份证号
-								<span></span>
-							</p>
-							<span>：</span>
-							<span class="idNum">220933848474747463632</span>
-						</li>
-						<li class="info">
-							<p class="title">
-								姓名
-								<span></span>
-							</p>
-							<span>：</span>
-							<span class="name">*磊</span>
-						</li>
-						<li class="info">
-							<p class="title">
-								宽带信息
-								<span></span>
-							</p>
-							<span>：</span>
-						</li>
-					</ul>
-					<ul class="queryLists">
-						<li class="queryList">
-							<div class="leftDiv">
-								<p>
-									<span class="broadName">宽带编码 :</span><span class="broadNum">
-										010988737364</span>
-								</p>
-								<p>
-									地址：黑龙江省哈尔滨市南岗区***********
-								</p>
-							</div>
-							<div class="rightDiv">
-								<div class="RechargeBtn">
-									去充值
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-				<div class="btn closeBtn">
-					关闭
-				</div>
-			</div>
-		</div>
-		<!-- 确认付款部分 -->
-		<div class="mask confirmPay">
-			<section class="btmPart">
-			<h1>
-				<b class="icon closeIcon"></b> 确认付款
-				<!-- <b class="icon askIcon"></b> -->
-			</h1>
-			<div class="ulMinH">
-				<ul class="orderCon">
-					<li class="orderInfor">
-						<span>充值金额：</span>
-						<span class="total">¥ <b>200</b> </span>
-					</li>
-					<li class="otherAmout">
-						<span>充值金额：¥</span>
-						<input id="otherAmount" class="newIpt" placeholder="00.00"
-							oninput="if(value.length>8)value=value.slice(0,8)"
-							onkeyup=changeAmount.call(this);; type="tel">
-						<b class="editIcon"></b>
-						<b class="delOtherIcon"></b>
-					</li>
-					<li class="discountList">
-						<b class="titlesml">优惠</b>
-						<span> 省1元：9.9折活动 </span>
-						<i class="rightArw"></i>
-					</li>
-					<li class="free_notify" style="display: none;" free="">
-						<!-- <p class="left">
-                        活动说明
-                    </p> -->
-						<!-- <p class="right"> -->
-						<span id="giftAmount"> <span class="activeTypeName"></span>
-						</span>
-						<i class="rightArw"></i>
-						<!-- </p> -->
-					</li>
-					<li class="jfList">
-						<span style="margin-right: .2rem;">共<b class="jifenAbleNum"></b>积分</span>
-						<input class="mui-switch mui-switch-anim" type="checkbox">
-						<div class="usejfList">
-							<span>使用</span>
-							<input class="jfIpt" type="tel">
-							<b class="editIcon"></b>
-						</div>
-						<div class="canUsePoint">
-							<span>可抵 <b style="color: #ff7745">¥</b> <b
-								class="pointsMoney" style="color: #ff7745">0</b> <b
-								style="color: #ff7745">元</b> </span>
-						</div>
-					</li>
-				</ul>
-				<p class="jfTips">
-					温馨提示：积分兑换的话费不能开具发票
-				</p>
-				<div class="payTypeLists">
-
-				</div>
-			</div>
-
-			<div class="btnPd">
-				<span class="pdl">实付金额</span>
-				<span class="payFeeMoney">￥<b></b> </span>
-				<button onclick=paycheck(true);;>
-					立即充值
-				</button>
-			</div>
-			</section>
-		</div>
-		<!-- 充值送详情部分 -->
-		<div class="activePage">
-			<section class="btmPart">
-			<h1>
-				<b class="icon goback"></b>
-				<span class="activeTypeName"></span>详情
-			</h1>
-			<div class="content">
-				<dl class="activeTitle">
-					<dd>
-						标题
-					</dd>
-					<dt>
-						<span class="free"></span><span id="desDiv"></span>
-					</dt>
-				</dl>
-				<dl class="activeInfor">
-					<dd>
-						详情
-					</dd>
-					<dt>
-						<span id="tipsDiv"></span>
-					</dt>
-				</dl>
-			</div>
-			</section>
-		</div>
-		<!-- 优惠券部分 -->
-		<div class="cashVoucherPart" id="appointCash">
-			<section class="btmPart">
-			<h1>
-				<b class="icon goback"></b> 优惠券
-			</h1>
-			<ul class="cashVoucher-lists">
-
-			</ul>
-
-			</section>
-		</div>
-		<script>
-	var cversion = "20190426040600";
-</script>
-
 		<script language="javascript" type="text/javascript"
 			src="<c:out value="${cp}"/>/js/a"></script>
 		<script language="javascript" type="text/javascript"
