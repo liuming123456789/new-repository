@@ -74,7 +74,7 @@
 			<div class="swiper-container" id="banner">
 				<div class="swiper-wrapper Carousel">
 					<div class="swiper-slide"
-						onclick="appHref('http://u.10010.cn/qAa4x','1805281707468663','98953149458790200002')">
+						>
 						<img src="<c:out value="${cp}"/>/images/carousel.png">
 					</div>
 				</div>
@@ -163,7 +163,7 @@
 								</div>
 								<div class="chargesDetails" style="float: right">
 
-									<a class="" href="javascript:toAPP()">
+									<a class="" >
 										<p>
 											套餐详情
 										</p> </a>

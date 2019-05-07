@@ -1216,7 +1216,7 @@ span.num-del {
 .num-box dd {
 	position: relative;
 	height: 38px;
-	margin-right: 46px;
+	margin-right: 0px;
 }
 
 .mobile-num  dd {
@@ -2617,7 +2617,7 @@ input.ng-dirty.ng-invalid.ng-invalid-required {
 
 .swiper-slide img {
 	width: 100%;
-	height: 1.42rem;
+	height: 2.22rem;
 	-webkit-touch-callout: none;
 }
 
@@ -2676,7 +2676,8 @@ input.ng-dirty.ng-invalid.ng-invalid-required {
 	position: absolute;
 	text-align: right;
 	padding-right: 0px;
-	left: 0
+	left: 0;
+	line-height: 19px;
 }
 
 .cashVoucher-new,.vouchers,.vouchers-half {
@@ -3216,7 +3217,7 @@ input.ng-dirty.ng-invalid.ng-invalid-required {
 	float: left;
 	height: 1.13rem;
 	line-height: .25rem;
-	padding: .2rem 0 .2rem .6rem;
+	padding: .2rem 0 .2rem 0rem;
 }
 
 .mob-Page .mob-num .num-ipt-bold,.fix-num .num-ipt-bold {
@@ -5437,7 +5438,7 @@ body.modal-open {
 	line-height: .68rem;
 	font-size: .24rem;
 	color: #333;
-	padding-left: 2.6rem
+	padding-left: 2.8rem
 }
 
 .twoActives .activetip .Img {
@@ -5699,7 +5700,7 @@ body.modal-open {
 	background: transparent;
 	height: .5rem;
 	width: 1.4rem;
-	font-size: .1em; line-height : 28px;
+	font-size: 1.1em; line-height : 28px;
 	border: 1px solid #da1313;
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
@@ -5715,7 +5716,7 @@ body.modal-open {
 	line-height: .5rem;
 	text-align: center;
 	color: #fff;
-	font-size: .1rem;
+	font-size: .25rem;
 	background-color: #4489dd;
 	letter-spacing: 0px;
 	text-indent: 0;
@@ -5731,7 +5732,7 @@ body.modal-open {
 	line-height: .5rem;
 	/*text-align: center;*/
 	color: #fff;
-	font-size: .1em;
+	font-size: 1.1em;
 	background-color: #f33f32;
 	letter-spacing: 0px;
 	text-indent: 10px;
@@ -5741,15 +5742,15 @@ body.modal-open {
 
 .systemInfo {
 	display: block;
-	width: 5.3rem;
+	width: 7rem;
 	height: 1.0rem;
 	line-height: .35rem;
 	text-align: center;
 	color: #1a1919;
-	font-size: .1em;
+	font-size: 0.8em;
 	letter-spacing: 0px;
 	text-indent: 10px;
-	margin: 0rem .36rem auto 1.3rem;
+	margin: 0rem .36rem auto .1rem;
 	font-family: 'Microsoft Yahei';
 }
 
@@ -5760,7 +5761,7 @@ body.modal-open {
 	line-height: .35rem;
 	text-align: center;
 	color: #1a1919;
-	font-size: .1em;
+	font-size: 0.8em;
 	letter-spacing: 0px;
 	text-indent: 10px;
 	margin: 1rem .36rem auto 0.1rem;
